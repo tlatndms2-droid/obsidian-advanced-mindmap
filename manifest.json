@@ -1,0 +1,9 @@
+{
+  "id": "canvas-mindmap",
+  "name": "Canvas Mindmap",
+  "version": "0.1.0",
+  "minAppVersion": "1.12.7",
+  "description": "Stage 0 development foundation. Product features require staged UI review and verification.",
+  "author": "tlatndms2-droid",
+  "isDesktopOnly": true
+}

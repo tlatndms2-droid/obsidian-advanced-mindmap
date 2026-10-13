@@ -1,0 +1,17 @@
+{
+  "name": "canvas-mindmap",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Canvas Mindmap staged implementation; stage 0 foundation only",
+  "scripts": {
+    "build": "node build.mjs",
+    "typecheck": "tsc --noEmit",
+    "verify:planning": "node scripts/check-planning.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "esbuild": "^0.28.2",
+    "obsidian": "^1.14.4",
+    "typescript": "^7.0.2"
+  }
+}

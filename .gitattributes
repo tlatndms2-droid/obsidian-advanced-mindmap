@@ -1,0 +1,2 @@
+# Preserve the new planning pack's original bytes, including line endings.
+planning/current/** -text

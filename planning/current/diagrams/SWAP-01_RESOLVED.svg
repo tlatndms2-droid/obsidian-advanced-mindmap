@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="780" viewBox="0 0 1180 780" role="img" aria-label="SWAP-01 기존 간격 유지 확정: E와 C의 순서를 바꾸되 가로 위치는 서로 교환, 세로 좌표는 간격 100을 유지하도록 보정">
+<rect width="1180" height="780" rx="15" fill="#f7f9fc"/>
+<text x="27" y="41" font-size="27" fill="#17253a" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">SWAP-01 해결 · 카드 크기 유지 + 기존 간격 보존</text>
+<text x="27" y="77" font-size="18" fill="#166534" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">사용자 결정: 기존 간격 유지 우선 · 필요 시 Y좌표 보정 · X좌표는 서로 교환</text>
+<rect x="24" y="105" width="548" height="515" rx="11" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
+<text x="42" y="138" font-size="20" fill="#17253a" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">교환 전</text>
+<rect x="608" y="105" width="548" height="515" rx="11" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
+<text x="626" y="138" font-size="20" fill="#17253a" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">Ctrl + Alt + ↓ 실행 후</text>
+<rect x="109" y="177" width="202" height="80" rx="9" fill="#e9f9f0" stroke="#16a34a" stroke-width="3"/><text x="210.0" y="223.0" font-size="18" fill="#162436" font-weight="700" text-anchor="middle" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">E · 선택 / 높이 80</text>
+<rect x="129" y="357" width="202" height="160" rx="9" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/><text x="230.0" y="443.0" font-size="18" fill="#162436" font-weight="700" text-anchor="middle" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">C / 높이 160</text>
+<path d="M 349 257 V 357 M341 257 H357 M341 357 H357" fill="none" stroke="#d97706" stroke-width="2"/><text x="361" y="313.0" font-size="19" fill="#b45309" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">100px</text>
+<text x="75" y="571" font-size="17" fill="#17253a" font-weight="400" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">E: X=100, Y=100</text>
+<text x="75" y="596" font-size="17" fill="#17253a" font-weight="400" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">C: X=120, Y=280</text>
+<rect x="713" y="177" width="202" height="160" rx="9" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/><text x="814.0" y="263.0" font-size="18" fill="#162436" font-weight="700" text-anchor="middle" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">C / 높이 160</text>
+<rect x="733" y="437" width="202" height="80" rx="9" fill="#e9f9f0" stroke="#16a34a" stroke-width="3"/><text x="834.0" y="483.0" font-size="18" fill="#162436" font-weight="700" text-anchor="middle" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">E · 선택 / 높이 80</text>
+<path d="M 955 337 V 437 M947 337 H963 M947 437 H963" fill="none" stroke="#d97706" stroke-width="2"/><text x="967" y="393.0" font-size="19" fill="#b45309" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">100px</text>
+<text x="656" y="571" font-size="17" fill="#17253a" font-weight="400" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">C: X=100, Y=100</text>
+<text x="656" y="596" font-size="17" fill="#17253a" font-weight="400" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">E: X=120, Y=360</text>
+<rect x="24" y="648" width="1132" height="103" rx="10" fill="#e8f7ee" stroke="#16a34a" stroke-width="2"/>
+<text x="44" y="681" font-size="19" fill="#166534" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">확정: 순서 교환 / 크기·연결·선택 상태 유지 / 간격 100px 유지 / 좌표 보정</text>
+<text x="44" y="717" font-size="16" fill="#17253a" font-weight="400" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">검증: E 이전 하단=180, C 이전 상단=280 → 100px / C 새 하단=260, E 새 상단=360 → 100px</text>
+</svg>

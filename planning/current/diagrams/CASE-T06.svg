@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="620" viewBox="0 0 1180 620" role="img">
+<rect width="1180" height="550" fill="#f7f9fc"/>
+<text x="25" y="40" font-size="25" fill="#17253a" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">CASE-T06 · 대상 선택 + 크기 다른 카드 간격 보존</text>
+<rect x="24" y="65" width="548" height="470" rx="8" stroke="#cbd5e1" fill="#fff"/>
+<rect x="608" y="65" width="548" height="470" rx="8" stroke="#cbd5e1" fill="#fff"/>
+<text x="39" y="90" font-size="20" fill="#17253a" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">E 선택 → Ctrl+Alt+↓</text>
+<text x="623" y="90" font-size="20" fill="#17253a" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">가장 가까운 C와 교환</text>
+<rect x="90" y="118" width="180" height="80" rx="9" fill="#e9f9f0" stroke="#16a34a" stroke-width="3"/><text x="180.0" y="164.0" font-size="18" fill="#162436" font-weight="700" text-anchor="middle" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">E · 80</text>
+<rect x="111" y="298" width="180" height="160" rx="9" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/><text x="201.0" y="384.0" font-size="18" fill="#162436" font-weight="700" text-anchor="middle" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">C · 160</text>
+<path d="M 311 198 V 298 M303 198 H319 M303 298 H319" fill="none" stroke="#d97706" stroke-width="2"/><text x="323" y="254.0" font-size="19" fill="#b45309" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">100px</text>
+<rect x="676" y="118" width="180" height="160" rx="9" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/><text x="766.0" y="204.0" font-size="18" fill="#162436" font-weight="700" text-anchor="middle" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">C · 160</text>
+<rect x="696" y="378" width="180" height="80" rx="9" fill="#e9f9f0" stroke="#16a34a" stroke-width="3"/><text x="786.0" y="424.0" font-size="18" fill="#162436" font-weight="700" text-anchor="middle" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">E · 80</text>
+<path d="M 897 278 V 378 M889 278 H905 M889 378 H905" fill="none" stroke="#d97706" stroke-width="2"/><text x="909" y="334.0" font-size="19" fill="#b45309" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">100px</text>
+<text x="28" y="562" font-size="16" fill="#17253a" font-weight="400" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">이 도식은 Canvas 좌표: E(100,100), C(120,280), 간격 100px → C(100,100), E(120,360)를 축척해 표현.</text>
+<text x="28" y="600" font-size="18" fill="#166534" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">선택 E 유지 · 카드 크기 변경 없음 · 연결선 대상 유지 · Undo 1회로 복원</text>
+</svg>
