@@ -1,9 +1,9 @@
 {
   "id": "canvas-mindmap",
   "name": "Canvas Mindmap",
-  "version": "0.1.0",
+  "version": "0.5.12",
   "minAppVersion": "1.12.7",
-  "description": "Stage 0 development foundation. Product features require staged UI review and verification.",
+  "description": "Keyboard-driven Canvas creation, navigation, Waypoints, colors, media previews and settings backup.",
   "author": "tlatndms2-droid",
   "isDesktopOnly": true
 }

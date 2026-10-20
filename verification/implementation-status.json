@@ -1,536 +1,748 @@
 {
-  "phase": 0,
-  "product_features_implemented": 0,
+  "phase": 7,
+  "product_features_implemented": 111,
   "requirements": [
     {
       "id": "CM-001",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-002",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-003",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-004",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-005",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-006",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-007",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-008",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-009",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-010",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-011",
-      "source_status": "재검토",
-      "implementation": "not-started"
+      "source_status": "확정",
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-012",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-013",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-014",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-015",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-016",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-017",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-018",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-019",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-020",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-021",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-022",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "CM-023",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-024",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-025",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-026",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-027",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-028",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-029",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-030",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-031",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-032",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-033",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-034",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-035",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-036",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-037",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-038",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-039",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-040",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-041",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-042",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-043",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-044",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-045",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-046",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-047",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-048",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-049",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "evidence": "verification/stage2.md",
+      "verification": "stage2-focused-scenarios-see-evidence"
     },
     {
       "id": "CM-050",
-      "source_status": "기술 검증",
-      "implementation": "not-started"
+      "source_status": "사용자 범위 제외",
+      "implementation": "excluded-by-user",
+      "evidence": "verification/stage3.md",
+      "verification": "not-applicable"
     },
     {
       "id": "CM-051",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-052",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-053",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-054",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-055",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-056",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-057",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-058",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-059",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-060",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-061",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-062",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-063",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-064",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-065",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-066",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-067",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-068",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-069",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-070",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-071",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-072",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-073",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-074",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-075",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-076",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-077",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-078",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-079",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-080",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-081",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-082",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-083",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "CM-084",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-085",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-086",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-087",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-088",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-089",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-090",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-091",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-092",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-093",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-094",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-095",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-096",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-097",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-098",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-099",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-100",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-101",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-102",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-103",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-104",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-105",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-106",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     },
     {
       "id": "CM-107",
@@ -605,22 +817,30 @@
     {
       "id": "CM-121",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "code-checked-runtime-cases-pending",
+      "evidence": "verification/stage6-code-report.md"
     },
     {
       "id": "CM-122",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "code-checked-runtime-cases-pending",
+      "evidence": "verification/stage6-code-report.md"
     },
     {
       "id": "CM-123",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "code-checked-runtime-cases-pending",
+      "evidence": "verification/stage6-code-report.md"
     },
     {
       "id": "CM-124",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "code-checked-runtime-cases-pending",
+      "evidence": "verification/stage6-code-report.md"
     },
     {
       "id": "CM-125",
@@ -629,8 +849,10 @@
     },
     {
       "id": "CM-126",
-      "source_status": "원본 검토",
-      "implementation": "not-started"
+      "source_status": "확정",
+      "implementation": "implemented",
+      "verification": "code-checked-runtime-cases-pending",
+      "evidence": "verification/stage6-code-report.md"
     },
     {
       "id": "CM-127",
@@ -640,114 +862,137 @@
     {
       "id": "CM-128",
       "source_status": "확정",
-      "implementation": "not-started"
+      "implementation": "implemented",
+      "verification": "stage4-runtime-and-restart-passed",
+      "evidence": "verification/stage4.md"
     }
   ],
   "acceptance_tests": [
     {
       "id": "T01",
       "scenario": "Ctrl+방향키로 빈 공간에 카드 생성",
-      "status": "not-run"
+      "status": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "T02",
       "scenario": "Ctrl+방향키 생성 중 충돌·연결·연쇄 이동",
-      "status": "not-run"
+      "status": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "T03",
       "scenario": "카드 생성과 밀어내기 Undo/Redo",
-      "status": "not-run"
+      "status": "partial-stage1-only",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "T04",
       "scenario": "Tab 삽입 공간 충분",
-      "status": "not-run"
+      "status": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "T05",
       "scenario": "Tab 삽입 공간 일부 부족",
-      "status": "not-run"
+      "status": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "T06",
       "scenario": "위치 교환 후보 둘·크기 다름",
-      "status": "not-run"
+      "status": "partial-stage2-focused-scenarios",
+      "evidence": "verification/stage2.md"
     },
     {
       "id": "T07",
       "scenario": "위치 교환 후보 없음",
-      "status": "not-run"
+      "status": "partial-stage2-focused-scenarios",
+      "evidence": "verification/stage2.md"
     },
     {
       "id": "T08",
       "scenario": "교환 후 Undo",
-      "status": "not-run"
+      "status": "partial-stage2-focused-scenarios",
+      "evidence": "verification/stage2.md"
     },
     {
       "id": "T09",
       "scenario": "단일 카드 수동 크기 조절",
-      "status": "not-run"
+      "status": "partial-stage2-focused-scenarios",
+      "evidence": "verification/stage2.md"
     },
     {
       "id": "T10",
       "scenario": "수동 크기 키 길게 누름",
-      "status": "not-run"
+      "status": "partial-stage2-focused-scenarios",
+      "evidence": "verification/stage2.md"
     },
     {
       "id": "T11",
       "scenario": "Auto Resize ON 편집 종료",
-      "status": "not-run"
+      "status": "partial-stage2-focused-scenarios",
+      "evidence": "verification/stage2.md"
     },
     {
       "id": "T12",
       "scenario": "Auto Resize 크기 Undo",
-      "status": "not-run"
+      "status": "partial-stage2-focused-scenarios",
+      "evidence": "verification/stage2.md"
     },
     {
       "id": "T13",
       "scenario": "Alt 탐색 기본",
-      "status": "not-run"
+      "status": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "T14",
       "scenario": "탐색 이동 도중 다음 입력",
-      "status": "not-run"
+      "status": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "T15",
       "scenario": "탐색 길게·편집 중·다중 선택",
-      "status": "not-run"
+      "status": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "T16",
       "scenario": "Waypoint 등록·재입력·덮어쓰기",
-      "status": "not-run"
+      "status": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "T17",
       "scenario": "Waypoint Undo/Redo",
-      "status": "not-run"
+      "status": "registration-and-name-data-undo-passed-name-edit-ui-stage4",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "T18",
       "scenario": "카드 위치 이동 후 Waypoint 호출",
-      "status": "not-run"
+      "status": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "T19",
       "scenario": "카메라 Waypoint 호출",
-      "status": "not-run"
+      "status": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "T20",
       "scenario": "Canvas 복제·rename·move",
-      "status": "not-run"
+      "status": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "T21",
       "scenario": "Waypoint 카드 삭제 후 Undo",
-      "status": "not-run"
+      "status": "stage3-scenarios-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "T22",
@@ -787,7 +1032,8 @@
     {
       "id": "T29",
       "scenario": "재시작·비활성화 후 데이터",
-      "status": "not-run"
+      "status": "partial-stages1-3-restart-passed",
+      "evidence": "verification/stage3.md"
     },
     {
       "id": "T30",
@@ -797,7 +1043,8 @@
     {
       "id": "T31",
       "scenario": "대형 Canvas 성능·안전",
-      "status": "not-run"
+      "status": "partial-stage1-only",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "T32",
@@ -807,7 +1054,8 @@
     {
       "id": "T33",
       "scenario": "Tab 연결 생성 / 일반 생성 비교",
-      "status": "not-run"
+      "status": "stage1-scenarios-passed",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "T34",
@@ -822,17 +1070,20 @@
     {
       "id": "T36",
       "scenario": "생성 모드 Context Menu",
-      "status": "not-run"
+      "status": "partial-stage1-only",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "T37",
       "scenario": "생성 후 입력 / 연결 Undo",
-      "status": "not-run"
+      "status": "partial-stage1-only",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "T38",
       "scenario": "서로 다른 높이 카드 위치 교환",
-      "status": "not-run"
+      "status": "partial-stage2-focused-scenarios",
+      "evidence": "verification/stage2.md"
     },
     {
       "id": "T39",
@@ -842,7 +1093,8 @@
     {
       "id": "T40",
       "scenario": "생성 기준 카드에 다중 연결 공유 카드",
-      "status": "not-run"
+      "status": "partial-stage1-only",
+      "evidence": "verification/stage1.md"
     },
     {
       "id": "T41",
@@ -853,6 +1105,36 @@
       "id": "T42",
       "scenario": "설정 복원 시 플러그인 데이터 분리",
       "status": "not-run"
+    },
+    {
+      "id": "T43",
+      "scenario": "빈 카드 파일 전환·취소·Undo",
+      "status": "not-run"
     }
-  ]
+  ],
+  "planning_source": "planning/revised",
+  "development_phase": 7,
+  "approved_ui_source": "planning/revised/APPROVED_UI.md",
+  "baseline_status": "complete",
+  "next_phase": 7,
+  "next_phase_status": "release-authorized",
+  "stage1_status": "implemented-and-sandbox-checked",
+  "user_review": "user-confirmed-all-current-features-2026-10-20",
+  "stage2_status": "implemented-and-sandbox-checked-CM050-excluded",
+  "stage3_status": "implemented-and-sandbox-checked",
+  "developmentVersion": "0.5.12",
+  "latestFeedback": {
+    "version": "0.4.14",
+    "evidence": "verification/feedback-0414.md",
+    "status": "sandbox-and-restart-passed",
+    "change": "Centre nearby group bounds on anchor; retain distant positions"
+  },
+  "nextPhase": 7,
+  "current_status": "release-preparation",
+  "stage5_status": "implemented-user-confirmed-scenarios-not-exhaustive",
+  "stage6_status": "code-checks-passed-user-ui-confirmed",
+  "current_spec": "planning/revised/STAGE5_CURRENT.md",
+  "current_evidence": "verification/stage6-code-report.md",
+  "user_checklist": "verification/stage6-user-check.md",
+  "status_note": "Per-case historical automated results remain unchanged. User confirmed all current features. Uninstall/reinstall preservation review and BRAT validation explicitly waived; do not claim these passed."
 }

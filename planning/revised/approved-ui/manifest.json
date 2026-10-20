@@ -1,0 +1,68 @@
+[
+  {
+    "file": "01-creation-menu.png",
+    "source_filename": "exec-0608e2ea-000d-42d3-a553-ceb328f09915.png",
+    "sha256": "3DAF70283D0256292CB07FBC4B3DA45180D1A4497194A48D930989047B0DE033",
+    "status": "user-approved-appearance"
+  },
+  {
+    "file": "02-source-menu.png",
+    "source_filename": "exec-a710962e-f317-4233-9ba4-39c3bab5995c.png",
+    "sha256": "9D95329D6B8A5DFF7C476D6C28310E572527B83F73268B7FB29324E25EC27A79",
+    "status": "user-approved-appearance"
+  },
+  {
+    "file": "03-waypoint-badge.png",
+    "source_filename": "exec-c8596d75-cdee-449a-9172-4f93efaa116e.png",
+    "sha256": "7922BF8F3758E36400EB3CEBE6E07795144DC62EA90F65D9CD7A081BBD0E1BE5",
+    "status": "user-approved-appearance"
+  },
+  {
+    "file": "04-waypoint-manager.png",
+    "source_filename": "exec-d30f706e-5668-43ff-9224-b88c85a53de4.png",
+    "sha256": "5AE27D0C62A343178E72447F56C5C17E84B4D3FA266CB5AA58664A9AE538B3F5",
+    "status": "user-approved-appearance"
+  },
+  {
+    "file": "05-color-palette.png",
+    "source_filename": "exec-dca832b4-d1b3-4580-9cab-8003d4fb4038.png",
+    "sha256": "0DA0C93720A673663BFAD70F3BEAE45FE3E3E64743FF1BFE8529860B1D42787F",
+    "status": "user-approved-appearance"
+  },
+  {
+    "file": "06-color-picker.png",
+    "source_filename": "exec-9a7e4cff-5034-4f46-88e8-21e09ccc2d4d.png",
+    "sha256": "1616BCE1E31402661EF5EF20DAEBCCF849B5D3F2C1F01910A8DFD52E1636D1B7",
+    "status": "user-approved-appearance"
+  },
+  {
+    "file": "07-settings.png",
+    "source_filename": "exec-92dc5c3d-ed10-4ed7-b276-bcd9517fa1fb.png",
+    "sha256": "513D161276EB09EEDA725738B3F55B3175C916CB0258A4EE370A893CBC0EC5A3",
+    "status": "user-approved-appearance"
+  },
+  {
+    "file": "08-restore-confirm.png",
+    "source_filename": "exec-f605187e-a804-4adb-ad98-7cb6cb90167c.png",
+    "sha256": "A75FACA73254F46A18A7A658DE6A7B15D212E16ACB8B3B455000D6B75F914410",
+    "status": "user-approved-appearance"
+  },
+  {
+    "file": "09-restore-error.png",
+    "source_filename": "exec-ed683c93-22e8-4cc3-8d93-a8f78766dcfd.png",
+    "sha256": "D89FB254C5AD4DB8BF9DD860E370646D430275E8743E2C8628241FBF4CCF6D34",
+    "status": "user-approved-appearance"
+  },
+  {
+    "file": "10-file-picker.png",
+    "source_filename": "exec-244deabf-bf56-44e1-83aa-c016cf402c1f.png",
+    "sha256": "4AD59A6F582A9BB21F2669DEA676E0476B5BCBF624EEE441029079F6E6EE5770",
+    "status": "user-approved-appearance"
+  },
+  {
+    "file": "11-image-picker.png",
+    "source_filename": "exec-0886ddee-3e17-4779-b340-d46b58bc1b04.png",
+    "sha256": "281CFB76440E73C4CE2CA5D436771E113B92294AFB6BF923A907771CAC1CEED6",
+    "status": "user-approved-appearance"
+  }
+]

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="710" viewBox="0 0 1180 710" role="img">
+<rect width="1180" height="710" rx="14" fill="#f7f9fc"/>
+<text x="26" y="40" font-size="25" fill="#17253a" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">T38 · 서로 다른 높이 카드 위치 교환</text>
+<text x="27" y="77" font-size="18" fill="#17253a" font-weight="400" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">초기 조건: X좌표 차 20px (≤ 40px 허용) / E 선택 / C가 아래에서 가장 가까운 후보</text>
+<rect x="22" y="100" width="548" height="490" rx="10" stroke="#cbd5e1" fill="#fff"/>
+<rect x="610" y="100" width="548" height="490" rx="10" stroke="#cbd5e1" fill="#fff"/>
+<text x="40" y="130" font-size="20" fill="#17253a" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">실행 전</text>
+<text x="630" y="130" font-size="20" fill="#17253a" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">Ctrl+Alt+↓ 실행 후</text>
+<rect x="96" y="165" width="193" height="80" rx="9" fill="#e9f9f0" stroke="#16a34a" stroke-width="3"/><text x="192.5" y="211.0" font-size="18" fill="#162436" font-weight="700" text-anchor="middle" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">E · 80</text>
+<rect x="116" y="345" width="193" height="160" rx="9" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/><text x="212.5" y="431.0" font-size="18" fill="#162436" font-weight="700" text-anchor="middle" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">C · 160</text>
+<path d="M 322 245 V 345 M314 245 H330 M314 345 H330" fill="none" stroke="#d97706" stroke-width="2"/><text x="334" y="301.0" font-size="19" fill="#b45309" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">100px</text>
+<rect x="685" y="165" width="193" height="160" rx="9" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/><text x="781.5" y="251.0" font-size="18" fill="#162436" font-weight="700" text-anchor="middle" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">C · 160</text>
+<rect x="705" y="425" width="193" height="80" rx="9" fill="#e9f9f0" stroke="#16a34a" stroke-width="3"/><text x="801.5" y="471.0" font-size="18" fill="#162436" font-weight="700" text-anchor="middle" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">E · 80</text>
+<path d="M 912 325 V 425 M904 325 H920 M904 425 H920" fill="none" stroke="#d97706" stroke-width="2"/><text x="924" y="381.0" font-size="19" fill="#b45309" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">100px</text>
+<text x="38" y="560" font-size="17" fill="#17253a" font-weight="400" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">E(100,100) / C(120,280)</text>
+<text x="625" y="560" font-size="17" fill="#17253a" font-weight="400" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">C(100,100) / E(120,360)</text>
+<rect x="22" y="615" width="1136" height="75" rx="9" fill="#e8f7ee" stroke="#16a34a"/>
+<text x="42" y="646" font-size="18" fill="#166534" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">수용 기준: 간격 100px 유지 · 좌표 보정 · 카드 크기/선택/내용/연결 유지</text>
+<text x="42" y="673" font-size="17" fill="#17253a" font-weight="400" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">Ctrl+Z 1회: 두 카드 원래 좌표 복원 · 테스트 실행 상태: 미실행</text>
+<text x="30" y="300" font-size="14" fill="#243247">연결 요구사항: CM-023, CM-024, CM-025, CM-026, CM-029, CM-030</text></svg>

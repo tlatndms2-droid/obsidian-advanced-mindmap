@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="390" viewBox="0 0 1180 390">
+<rect width="1180" height="390" rx="14" fill="#f3f6fa"/>
+<text x="25" y="40" font-size="26" fill="#17253a" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">문서 05 · 결정 상태</text>
+<rect x="24" y="65" width="556" height="136" rx="11" fill="#e8f8ef" stroke="#16a34a"/>
+<text x="46" y="108" font-size="23" fill="#17253a" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">1 · 사용자 확정</text>
+<text x="46" y="153" font-size="18" fill="#17253a" font-weight="400" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">SWAP-01 포함 122개 확정</text>
+<rect x="598" y="65" width="556" height="136" rx="11" fill="#fff7ed" stroke="#d97706"/>
+<text x="620" y="108" font-size="23" fill="#17253a" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">2 · 재검토 1개</text>
+<text x="620" y="153" font-size="18" fill="#17253a" font-weight="400" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">Tab 연결 출발점 확인</text>
+<rect x="24" y="220" width="556" height="136" rx="11" fill="#f1f5f9" stroke="#94a3b8"/>
+<text x="46" y="263" font-size="23" fill="#17253a" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">3 · 기술 검증 4개</text>
+<text x="46" y="308" font-size="18" fill="#17253a" font-weight="400" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">API·Undo·제거 후 복원</text>
+<rect x="598" y="220" width="556" height="136" rx="11" fill="#f1f5f9" stroke="#94a3b8"/>
+<text x="620" y="263" font-size="23" fill="#17253a" font-weight="700" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">4 · 원본 검토 1개</text>
+<text x="620" y="308" font-size="18" fill="#17253a" font-weight="400" text-anchor="start" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif">빈 카드 파일 전환 상세</text>
+</svg>

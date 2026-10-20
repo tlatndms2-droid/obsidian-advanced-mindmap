@@ -1,0 +1,11 @@
+import {build} from 'esbuild';import assert from 'node:assert/strict';
+async function load(file){const o=await build({entryPoints:[file],bundle:true,write:false,format:'esm',platform:'node'});return import('data:text/javascript;base64,'+Buffer.from(o.outputFiles[0].text).toString('base64'));}
+const {createLayout}=await load('src/layout.ts'),{applyCreation}=await load('src/creation-transaction.ts');let passed=0;
+for(const ext of ['png','mp4','pdf','mp3','md','canvas'])for(const connected of [false,true]){
+ const before={nodes:[{id:'source',type:'text',text:'source',x:0,y:0,width:250,height:100},{id:'file',type:'file',file:'sample.'+ext,x:400,y:0,width:500,height:400},{id:'other',type:'text',text:'other',x:1000,y:0,width:250,height:100}],edges:[{id:'in',fromNode:'source',toNode:'file',fromSide:'right',toSide:'left',label:'keep',color:'3'},{id:'out',fromNode:'file',toNode:'other',fromSide:'right',toSide:'left'}],canvasMindmap:{waypoints:{1:{kind:'card',node:'file',name:'File'}}}};
+ const after=createLayout(before,{anchor:'file',id:'new',direction:'down',tab:true,width:500,height:100,gap:100,connected,source:'source'});let live=structuredClone(before),history=[];
+ const c={data:live,importData(delta,replace){assert.equal(replace,false);assert.deepEqual(delta.nodes.map(n=>n.id),['new']);assert(!delta.edges.some(e=>e.id==='in'||e.id==='out'));live.nodes.push(...structuredClone(delta.nodes));live.edges.push(...structuredClone(delta.edges));},getData(){return {...this.data,nodes:live.nodes,edges:live.edges}},pushHistory(d){history.push(structuredClone(d))}};
+ applyCreation(c,before,after);assert.deepEqual(live.edges.slice(0,2),before.edges);assert.deepEqual(live.nodes.slice(0,3),before.nodes);assert.equal(live.edges.length,connected?3:2);assert.deepEqual(c.data.canvasMindmap,before.canvasMindmap);assert.equal(history.length,1);passed++;
+}
+const before={nodes:[],edges:[{id:'keep',fromNode:'a',toNode:'b'}]};assert.throws(()=>applyCreation({importData(){},getData(){return {nodes:[],edges:[]}},pushHistory(){throw Error('must not commit')}},before,before),/Existing connection/);
+console.log('PASS '+passed+' file-card Tab cases: additive import, existing incoming/outgoing connections/embeds unchanged, both creation modes; lost-edge guard rejects commit. Mock Canvas, not UI validation.');

@@ -1,12 +1,13 @@
 {
   "name": "canvas-mindmap",
-  "version": "0.1.0",
+  "version": "0.5.12",
   "private": true,
-  "description": "Canvas Mindmap staged implementation; stage 0 foundation only",
+  "description": "Keyboard-driven Canvas creation, navigation, Waypoints, colors, media previews and settings backup.",
   "scripts": {
     "build": "node build.mjs",
     "typecheck": "tsc --noEmit",
-    "verify:planning": "node scripts/check-planning.mjs"
+    "verify:planning": "node scripts/check-planning.mjs",
+    "test": "node scripts/test-all.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
