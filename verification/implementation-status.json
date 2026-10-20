@@ -1117,7 +1117,7 @@
   "approved_ui_source": "planning/revised/APPROVED_UI.md",
   "baseline_status": "complete",
   "next_phase": 7,
-  "next_phase_status": "release-authorized",
+  "next_phase_status": "release-published",
   "stage1_status": "implemented-and-sandbox-checked",
   "user_review": "user-confirmed-all-current-features-2026-10-20",
   "stage2_status": "implemented-and-sandbox-checked-CM050-excluded",
@@ -1130,11 +1130,18 @@
     "change": "Centre nearby group bounds on anchor; retain distant positions"
   },
   "nextPhase": 7,
-  "current_status": "release-preparation",
+  "current_status": "release-published-assets-verified",
   "stage5_status": "implemented-user-confirmed-scenarios-not-exhaustive",
   "stage6_status": "code-checks-passed-user-ui-confirmed",
   "current_spec": "planning/revised/STAGE5_CURRENT.md",
   "current_evidence": "verification/stage6-code-report.md",
   "user_checklist": "verification/stage6-user-check.md",
-  "status_note": "Per-case historical automated results remain unchanged. User confirmed all current features. Uninstall/reinstall preservation review and BRAT validation explicitly waived; do not claim these passed."
+  "status_note": "Per-case historical automated results remain unchanged. User confirmed all current features. Uninstall/reinstall preservation review and BRAT validation explicitly waived; do not claim these passed.",
+  "release": {
+    "version": "0.5.12",
+    "url": "https://github.com/tlatndms2-droid/obsidian-advanced-mindmap/releases/tag/0.5.12",
+    "source_commit": "b7b2951",
+    "public_assets": "all-three-byte-identical",
+    "brat": "skipped-by-explicit-user-request"
+  }
 }
