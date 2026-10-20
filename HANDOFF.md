@@ -1,4 +1,7 @@
-# 0.5.13 — Ctrl+Shift+A/S 수정
+# 0.5.13 — Ctrl+Shift+A/S 수정 및 배포 완료
+
+Release: https://github.com/tlatndms2-droid/obsidian-advanced-mindmap/releases/tag/0.5.13
+소스 66ff9f4. 공개 설치 파일 3개와 로컬 빌드 바이트 일치 확인. 재시작 후 Sandbox 로드 버전 0.5.13 및 설치 파일 일치 확인.
 
 2026-10-20. 영문 A 입력은 안내가 나오고, 한글 key=ㅁ/code=KeyA 이벤트는 안내가 나오지 않는 것을 Sandbox에서 재현했다. A/S 물리 키 처리 추가. Obsidian 기본 명령 경로와 직접 처리 경로가 같은 이벤트를 두 번 실행하지 않도록 차단한다. 편집 중 차단과 크기 조절은 유지.
 
