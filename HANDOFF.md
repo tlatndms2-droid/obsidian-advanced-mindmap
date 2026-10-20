@@ -1,3 +1,10 @@
+# 0.5.13 — Ctrl+Shift+A/S 수정
+
+2026-10-20. 영문 A 입력은 안내가 나오고, 한글 key=ㅁ/code=KeyA 이벤트는 안내가 나오지 않는 것을 Sandbox에서 재현했다. A/S 물리 키 처리 추가. Obsidian 기본 명령 경로와 직접 처리 경로가 같은 이벤트를 두 번 실행하지 않도록 차단한다. 편집 중 차단과 크기 조절은 유지.
+
+- 8개 코드 검사 묶음·타입·빌드 통과. Sandbox 실제 영문 A/S, 한글 키 이벤트 A/S, 연결 및 방향 전환, 복수 연결 선택, Undo, 편집 차단·크기 조절 통과. 같은 Sandbox 종료 후 재실행하여 동일 검사 통과. 한글 검사는 KeyboardEvent 주입이며 OS IME 전환 자동 시험은 아님.
+- 테스트 Canvas만 사용. 기존 사용자 Canvas 수정 없음. Sandbox를 열어둠. BRAT 검사는 기존 사용자 생략 요청 유지.
+
 # 현재 인계 요약 — 0.5.12 / 공개 배포 완료
 
 Release: https://github.com/tlatndms2-droid/obsidian-advanced-mindmap/releases/tag/0.5.12

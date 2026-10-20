@@ -1,6 +1,6 @@
 # Canvas Mindmap
 
-Windows용 Obsidian Canvas 플러그인 **0.5.12**.
+Windows용 Obsidian Canvas 플러그인 **0.5.13**.
 키보드로 카드 생성·탐색·연결·정렬, Waypoint, 색상 선택, 파일 교체와 미디어 미리보기를 사용할 수 있습니다. 설정과 안내는 한국어입니다.
 
 ## 설치

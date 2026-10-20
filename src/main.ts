@@ -27,6 +27,8 @@ export default class CanvasMindmap extends Plugin {
  private editorCamera!:EditorCamera;
  private altTap:{down:number;last:number;clean:boolean;c:any}|null=null;
  private connectHeld:Canvas|null=null;
+ private handledConnectionEvents=new WeakSet<Event>();
+ private shouldRunConnectionCommand(){const e=window.event;if(e?.type!=='keydown')return true;const seen=this.handledConnectionEvents.has(e);this.handledConnectionEvents.add(e);return !seen&&!(e as KeyboardEvent).repeat;}
  private connectHint:HTMLElement|null=null;
  private linkTimer:number|null=null;
  private linkMenu:{el:HTMLElement;c:Canvas;anchor:string;ids:string[];index:number}|null=null;
@@ -54,9 +56,9 @@ export default class CanvasMindmap extends Plugin {
   this.addCommand({id:'connect-direction',name:'방향키로 가까운 카드 연결 (누른 채 사용)',hotkeys:[{modifiers:['Ctrl','Shift'],key:'a'}],checkCallback:checking=>{
    const c=this.current();
    if(!c||c.readonly||!this.selected(c)||document.activeElement?.closest('input,textarea,[contenteditable="true"],.modal-container')||[...c.nodes.values()].some((n:any)=>n.isEditing))return false;
-   if(!checking){this.reset();this.sizes.finish();this.connectHeld=c;this.showConnectHint();}return true;
+   if(!checking&&this.shouldRunConnectionCommand()){this.reset();this.sizes.finish();this.connectHeld=c;this.showConnectHint();}return true;
   }});
-  this.addCommand({id:'reverse-connection',name:'선택 카드의 연결 방향 전환',hotkeys:[{modifiers:['Ctrl','Shift'],key:'s'}],checkCallback:checking=>{const c=this.current();if(!c||c.readonly||!this.selected(c)||[...c.nodes.values()].some((n:any)=>n.isEditing)||document.activeElement?.closest('input,textarea,[contenteditable="true"],.modal-container'))return false;if(!checking)this.openReverse(c);return true;}});
+  this.addCommand({id:'reverse-connection',name:'선택 카드의 연결 방향 전환',hotkeys:[{modifiers:['Ctrl','Shift'],key:'s'}],checkCallback:checking=>{const c=this.current();if(!c||c.readonly||!this.selected(c)||[...c.nodes.values()].some((n:any)=>n.isEditing)||document.activeElement?.closest('input,textarea,[contenteditable="true"],.modal-container'))return false;if(!checking&&this.shouldRunConnectionCommand()){this.openReverse(c);}return true;}});
   this.addCommand({id:'arrange-connected',name:'연결된 카드 정렬 (시험)',hotkeys:[{modifiers:['Ctrl','Shift'],key:'l'}],checkCallback:checking=>{const c=this.current();if(!c||c.readonly||!this.selected(c)||[...c.nodes.values()].some((n:any)=>n.isEditing)||document.activeElement?.closest('input,textarea,[contenteditable="true"],.modal-container'))return false;if(!checking)this.arrange(c);return true;}});
   this.syncColorCommands();
   this.editorCamera=new EditorCamera(this);
@@ -186,6 +188,13 @@ export default class CanvasMindmap extends Plugin {
   const frame=target?.ownerDocument?.defaultView?.frameElement;
   const insideCard=[...c.nodes.values()].some((node:any)=>node.isEditing&&(node.nodeEl.contains(target)||(frame&&node.nodeEl.contains(frame))));
   if(input&&!insideCard)return;
+  // Match physical keys before Obsidian's character-based hotkeys (ㅁ/ㄴ in Korean).
+  if(!editing&&!input&&n&&e.ctrlKey&&e.shiftKey&&!e.altKey&&!e.metaKey&&(e.code==='KeyA'||e.code==='KeyS')){
+   this.stop(e);if(e.repeat||this.handledConnectionEvents.has(e))return;
+   if(e.code==='KeyA'){this.reset();this.sizes.finish();this.connectHeld=c;this.showConnectHint();}
+   else this.openReverse(c);
+   return;
+  }
   if(!editing&&!input&&!this.menu&&!this.linkMenu&&!e.ctrlKey&&!e.shiftKey&&!e.altKey&&!e.metaKey&&(e.code==='KeyX'||e.key.toLowerCase()==='x')){
    const cards=[...c.selection].filter((item:any)=>c.nodes.has(item.id));if(!cards.length)return;
    this.stop(e);if(e.repeat)return;this.reset();this.clearConnectHint();this.sizes.finish();this.selections.observe(c);this.selections.capture(c);

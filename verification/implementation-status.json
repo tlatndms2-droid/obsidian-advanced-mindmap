@@ -1122,7 +1122,7 @@
   "user_review": "user-confirmed-all-current-features-2026-10-20",
   "stage2_status": "implemented-and-sandbox-checked-CM050-excluded",
   "stage3_status": "implemented-and-sandbox-checked",
-  "developmentVersion": "0.5.12",
+  "developmentVersion": "0.5.13",
   "latestFeedback": {
     "version": "0.4.14",
     "evidence": "verification/feedback-0414.md",
@@ -1130,7 +1130,7 @@
     "change": "Centre nearby group bounds on anchor; retain distant positions"
   },
   "nextPhase": 7,
-  "current_status": "release-published-assets-verified",
+  "current_status": "0.5.13-sandbox-and-restart-passed-release-pending",
   "stage5_status": "implemented-user-confirmed-scenarios-not-exhaustive",
   "stage6_status": "code-checks-passed-user-ui-confirmed",
   "current_spec": "planning/revised/STAGE5_CURRENT.md",
