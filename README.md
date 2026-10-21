@@ -1,6 +1,6 @@
 # Canvas Mindmap
 
-Windows용 Obsidian Canvas 플러그인 **0.5.13**.
+Windows용 Obsidian Canvas 플러그인 **0.5.14**.
 키보드로 카드 생성·탐색·연결·정렬, Waypoint, 색상 선택, 파일 교체와 미디어 미리보기를 사용할 수 있습니다. 설정과 안내는 한국어입니다.
 
 ## 설치
@@ -21,7 +21,8 @@ Windows용 Obsidian Canvas 플러그인 **0.5.13**.
 | Alt+W | Waypoint 관리창 |
 | Ctrl+Shift+C | 색상 선택 |
 | Alt+I | 빈 카드에 파일 삽입 / 파일 카드 교체 |
-| Enter / Ctrl+Enter | 파일 선택 확정 / 미리보기 열기·닫기 |
+| Enter (Canvas에서 미디어 카드 선택) | 영상·YouTube·음악 재생 / 이미지 크게 보기 |
+| Enter / Ctrl+Enter (파일 선택창) | 파일 선택 확정 / 미리보기 열기·닫기 |
 | X | 선택 카드 삭제 |
 | Ctrl+Z | 실행 취소 |
 

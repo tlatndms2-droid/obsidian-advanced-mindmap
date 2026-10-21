@@ -1,4 +1,5 @@
 import {applyCreation} from './creation-transaction';
+import {CardMedia} from './card-media';
 import {mediaExtensions} from './media-previews';
 import { FileInsertMenu } from './file-insert';
 import { insertFile,canInsertFile } from './file-insert-data';
@@ -27,6 +28,7 @@ export default class CanvasMindmap extends Plugin {
  private editorCamera!:EditorCamera;
  private altTap:{down:number;last:number;clean:boolean;c:any}|null=null;
  private connectHeld:Canvas|null=null;
+ private cardMedia!:CardMedia;
  private handledConnectionEvents=new WeakSet<Event>();
  private shouldRunConnectionCommand(){const e=window.event;if(e?.type!=='keydown')return true;const seen=this.handledConnectionEvents.has(e);this.handledConnectionEvents.add(e);return !seen&&!(e as KeyboardEvent).repeat;}
  private connectHint:HTMLElement|null=null;
@@ -41,6 +43,7 @@ export default class CanvasMindmap extends Plugin {
  async onload() {
   const saved=await this.loadData();this.settings={...this.settings,...saved,origins:saved?.origins||{}};
   this.sizes=new SizeController(this);
+  this.cardMedia=new CardMedia(this.app,()=>this.current());this.register(()=>this.cardMedia.dispose());
   this.navigation=new NavigationController(this);
   this.panels=new CanvasPanels(this,this.navigation);
   this.fileInsert=new FileInsertMenu(this.app,(c,id,file)=>this.convertFile(c,id,file.path),()=>this.current(),cb=>this.register(cb));
@@ -149,6 +152,13 @@ export default class CanvasMindmap extends Plugin {
  private selected(c:Canvas){const s=[...c.selection] as any[];return s.length===1&&c.nodes.has(s[0].id)&&s[0].getData().type!=='group'?s[0]:null;}
  private initializeDimensions(c:Canvas){const d=c.config?.defaultTextNodeDimensions;if(d&&Number.isFinite(d.width)&&Number.isFinite(d.height)&&(this.settings.width===null||this.settings.height===null)){this.settings.width??=d.width;this.settings.height??=d.height;void this.persist();}}
  private stop(e:KeyboardEvent){e.preventDefault();e.stopImmediatePropagation();}
+ private mediaKey(e:KeyboardEvent,c:Canvas){
+  if(e.key!=='Enter'||e.ctrlKey||e.shiftKey||e.altKey||e.metaKey||e.isComposing||c.readonly||this.menu||this.linkMenu)return false;
+  if((e.target as HTMLElement)?.closest?.('input,textarea,[contenteditable="true"],.modal-container,button,a,video,audio'))return false;
+  if([...c.nodes.values()].some((node:any)=>node.isEditing))return false;
+  const node=this.selected(c);if(!node||!this.cardMedia.supports(node))return false;
+  this.stop(e);if(!e.repeat)this.cardMedia.activate(c,node);return true;
+ }
  private patchCanvasInput(c:Canvas){
   if(this.canvasInputs.has(c))return;this.canvasInputs.add(c);
   // Native import reuses a node by ID even when its type changes. Recreate only
@@ -168,6 +178,7 @@ export default class CanvasMindmap extends Plugin {
     if(this.fileInsert.key(e))return false;
     if(this.panels.capturesCanvasKeys(c)&&this.panels.key(e))return false;
     if(this.linkMenuKey(e,c)||this.connectionKey(e,c))return false;
+    if(this.mediaKey(e,c))return false;
     if(binding.modifiers!=='Shift')return original(e,...args);
     const editing=[...c.nodes.values()].some((n:any)=>n.isEditing);
     const input=(e.target as HTMLElement)?.closest?.('input,textarea,[contenteditable="true"],.modal-container');
@@ -188,6 +199,7 @@ export default class CanvasMindmap extends Plugin {
   const frame=target?.ownerDocument?.defaultView?.frameElement;
   const insideCard=[...c.nodes.values()].some((node:any)=>node.isEditing&&(node.nodeEl.contains(target)||(frame&&node.nodeEl.contains(frame))));
   if(input&&!insideCard)return;
+  if(this.mediaKey(e,c))return;
   // Match physical keys before Obsidian's character-based hotkeys (ㅁ/ㄴ in Korean).
   if(!editing&&!input&&n&&e.ctrlKey&&e.shiftKey&&!e.altKey&&!e.metaKey&&(e.code==='KeyA'||e.code==='KeyS')){
    this.stop(e);if(e.repeat||this.handledConnectionEvents.has(e))return;

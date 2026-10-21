@@ -1,0 +1,23 @@
+import {build} from 'esbuild';import vm from 'node:vm';import assert from 'node:assert/strict';
+let opens=0,closed=0,notices=[],plays=0;
+class Preview{constructor(a,k,f,close){this.closeCallback=close;}open(){opens++;}close(){closed++;this.closeCallback();}}
+const out=await build({entryPoints:['src/card-media.ts'],bundle:true,write:false,format:'cjs',platform:'node',external:['obsidian','./file-insert']});
+const context={module:{exports:{}},exports:{},URL,console,require:n=>n==='obsidian'?{Notice:class{constructor(t){notices.push(t)}}}:{MediaPreview:Preview}};
+vm.runInNewContext(out.outputFiles[0].text,context);const {CardMedia,youtubeUrl,youtubePlayScript}=context.module.exports;
+const player={ended:false,currentTime:8,play(){plays++;return Promise.resolve();}},app={vault:{getFileByPath:path=>({name:path,path,extension:path.split('.').pop()})}},canvas={nodes:new Map(),wrapperEl:{focus(){}}};
+const node=(type,file)=>({id:'n',getData:()=>({type,...(type==='link'?{url:file}:{file})}),attach(){},nodeEl:{querySelector:()=>player}});
+const media=new CardMedia(app,()=>canvas);
+for(const ext of ['png','jpg','gif','webp','mp4','webm','mp3','wav'])assert(media.supports(node('file','test.'+ext)));
+for(const ext of ['pdf','md','canvas'])assert(!media.supports(node('file','test.'+ext)));
+assert(!media.supports(node('text','test.png')));assert(youtubeUrl('https://youtu.be/M7lc1UVf-VE'));
+for(const url of ['file:///test','https://youtube.com.evil.test/watch','https://releases.obsidian.md/other'])assert(!youtubeUrl(url));
+const n=node('file','test.mp3');media.activate(canvas,n);media.activate(canvas,n);assert.equal(plays,1);await new Promise(r=>setImmediate(r));assert.equal(player.currentTime,8);
+player.ended=true;media.activate(canvas,n);await new Promise(r=>setImmediate(r));assert.equal(player.currentTime,0);
+const image=node('file','test.png');media.activate(canvas,image);media.activate(canvas,image);assert.equal(opens,1);media.dispose();assert.equal(closed,1);
+new CardMedia({vault:{getFileByPath:()=>null}},()=>canvas).activate(canvas,n);assert.equal(notices.length,1);
+let posted=0;const frame={src:'https://www.youtube-nocookie.com/embed/M7lc1UVf-VE?start=42',contentWindow:{postMessage(){posted++}}};
+const ctx={URL,location:{href:'https://releases.obsidian.md/youtube?v=M7lc1UVf-VE'},document:{getElementById:()=>({click(){}}),querySelector:()=>frame}};
+assert.equal(vm.runInNewContext(youtubePlayScript,ctx),true);assert.equal(new URL(frame.src).searchParams.get('start'),'42');assert.equal(new URL(frame.src).searchParams.get('autoplay'),'1');
+vm.runInNewContext(youtubePlayScript,ctx);assert.equal(posted,1);
+assert.equal(vm.runInNewContext(youtubePlayScript,{URL,location:{href:'https://example.com'},document:{querySelector(){throw Error('must not inspect unrelated page')}}}),false);
+console.log('PASS media filtering, PDF/text exclusion, image preview, playback/replay, repeat guard, missing file and YouTube host restriction/start time.');

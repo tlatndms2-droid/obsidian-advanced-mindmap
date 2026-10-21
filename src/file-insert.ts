@@ -81,7 +81,7 @@ class MediaPicker extends Modal{
  private openPreview(file?:TFile,play=false){if(!file||this.preview)return;this.preview=new MediaPreview(this.app,this.kind,file,()=>{this.preview=null;if(this.list.isConnected){this.list.querySelectorAll<HTMLElement>('.cm-file-result')[this.index]?.focus();}},play);this.preview.open();}
  onClose(){this.resizeCleanup?.();this.preview?.close();this.preview=null;this.stopThumbnails();this.contentEl.empty();this.closed();}
 }
-class MediaPreview extends Modal{
+export class MediaPreview extends Modal{
  private pdf:PdfPreviews|null=null;private player:HTMLMediaElement|null=null;
  private focusFrame:number|null=null;
  private playbackListener=(e:KeyboardEvent)=>this.playbackKey(e);

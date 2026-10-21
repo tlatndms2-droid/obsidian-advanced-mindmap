@@ -1,3 +1,11 @@
+# 0.5.14 — 선택 카드 Enter 미디어 동작
+
+2026-10-21 사용자 승인: 영상·YouTube·음악 카드 선택 후 Enter 재생, 이미지 카드 Enter 확대 보기. PDF 기존 기능 유지.
+- 영상·음악은 기존 카드의 플레이어를 재생하고, 이미지에는 기존 미리보기 창을 재사용한다. Esc/Ctrl+Enter 닫기 후 카드 선택 유지.
+- YouTube는 Obsidian의 실제 YouTube webview 내 기존 재생 표지를 실행하고 iframe API 재생 명령을 사용한다. 저장된 카드 URL·좌표·크기·연결을 바꾸지 않는다. 임의 웹사이트에는 실행하지 않는다.
+- 9개 코드 검사 묶음·타입 검사·빌드 통과. Sandbox에서 실제 영상·음악 재생 시간, 이미지 창·닫기·선택 유지, YouTube playerState=1 및 재생 시간 확인. 전체 Sandbox 종료 후 재실행하여 동일 검사 통과. PDF/텍스트/입력란/편집/다중선택/수정키/IME 입력 보호 통과.
+- Sandbox: Enter-미디어-확인-1792546624952.canvas 열어둠. 기존 사용자 Canvas 수정 없음. 테스트 전 설정·workspace 백업은 verification/artifacts/enter-media/. BRAT 검사는 사용자 요청에 따라 생략 유지.
+
 # 0.5.13 — Ctrl+Shift+A/S 수정 및 배포 완료
 
 Release: https://github.com/tlatndms2-droid/obsidian-advanced-mindmap/releases/tag/0.5.13

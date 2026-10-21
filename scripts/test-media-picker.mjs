@@ -8,7 +8,7 @@ class Modal{constructor(app){this.app=app;this.contentEl=new El();this.modalEl=n
 let buttons=[];
 class Setting{constructor(){}addButton(cb){const b={setButtonText(t){this.text=t;return this;},setCta(){return this;},onClick(f){this.click=f;return this;}};cb(b);buttons.push(b);return this;}}
 const stub={Modal,FuzzySuggestModal:Modal,Setting,loadPdfJs:async()=>{throw Error('unused')}};
-const compiled=await build({stdin:{contents:await fs.readFile('src/file-insert.ts','utf8')+'\nexport {MediaPicker,MediaPreview,PdfPreviews};',resolveDir:process.cwd()+'/src',loader:'ts'},bundle:true,write:false,format:'cjs',platform:'node',external:['obsidian']});
+const compiled=await build({stdin:{contents:await fs.readFile('src/file-insert.ts','utf8')+'\nexport {MediaPicker,PdfPreviews};',resolveDir:process.cwd()+'/src',loader:'ts'},bundle:true,write:false,format:'cjs',platform:'node',external:['obsidian']});
 const context={module:{exports:{}},exports:{},require:()=>stub,console,requestAnimationFrame:()=>1,cancelAnimationFrame:()=>{},document:{createElement:t=>new El(t)}};vm.runInNewContext(compiled.outputFiles[0].text,context);const {MediaPreview,MediaPicker,PdfPreviews}=context.module.exports;
 const app={vault:{getResourcePath:f=>'app:///'+f.path}};const file={name:'sample.mp3',path:'sample.mp3'};
 let closed=0;
