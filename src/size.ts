@@ -1,3 +1,4 @@
+import {registerRuntimeCleanup} from './runtime-cleanup';
 import { Component, MarkdownRenderer, type App } from 'obsidian';
 import type { CanvasData } from './layout';
 
@@ -24,7 +25,7 @@ export class SizeController {
   if(!this.canvases.has(c)){
    this.canvases.add(c);const history=c.history,original=history.push,controller=this;
    const wrapper=function(this:any,data:CanvasData){if(controller.hold?.c===c)return;if(snapshotKey(this.data[this.current])===snapshotKey(data))return;return original.call(this,data);};
-   history.push=wrapper;this.host.register(()=>{if(history.push===wrapper)history.push=original;});
+   history.push=wrapper;registerRuntimeCleanup(this.host,c,()=>{if(history.push===wrapper)history.push=original;});
   }
 
  }

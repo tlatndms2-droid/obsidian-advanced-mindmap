@@ -1,3 +1,4 @@
+import {registerRuntimeCleanup} from './runtime-cleanup';
 import {applyCreation} from './creation-transaction';
 import {CardMedia} from './card-media';
 import {mediaExtensions} from './media-previews';
@@ -28,6 +29,8 @@ export default class CanvasMindmap extends Plugin {
  private selections!:SelectionHistory;
  private editorCamera!:EditorCamera;
  private altTap:{clean:boolean;c:any}|null=null;
+ private altRepeat:{c:any;ids:string[];after:string[];timer:number}|null=null;
+ private clearAltRepeat(){if(this.altRepeat)window.clearTimeout(this.altRepeat.timer);this.altRepeat=null;}
  private multiAnchor:{c:any;id:string}|null=null;
  private connectHeld:Canvas|null=null;
  private cardMedia!:CardMedia;
@@ -40,6 +43,7 @@ export default class CanvasMindmap extends Plugin {
  private menu:MenuState|null=null;
  private docs=new WeakSet<Document>();
  private canvasInputs=new WeakSet<object>();
+ private inputScopes=new WeakMap<object,()=>void>();
  private colorCommands=new Set<string>();
  private saveChain=Promise.resolve();
  async onload() {
@@ -72,7 +76,7 @@ export default class CanvasMindmap extends Plugin {
   this.addCommand({id:'card-context-menu',name:'선택한 카드 우클릭 메뉴',hotkeys:[{modifiers:['Alt'],key:'m'}],checkCallback:checking=>{const c=this.current();if(!this.canUseCardCommand(c)||!this.selected(c))return false;if(!checking){if(this.altTap)this.altTap.clean=false;this.reset();const n=this.selected(c),r=n.nodeEl.getBoundingClientRect();n.nodeEl.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true,view:window,button:2,clientX:r.left+r.width/2,clientY:r.top+Math.min(30,r.height/2)}));}return true;}});
   this.addSettingTab(new CreationSettings(this));this.attach(document);
   const frames=new WeakSet<HTMLIFrameElement>();
-  const watch=(frame:HTMLIFrameElement)=>{if(frames.has(frame))return;frames.add(frame);const attach=()=>{try{if(frame.contentDocument)this.attach(frame.contentDocument);}catch{}};this.registerDomEvent(frame,'load',attach);attach();};
+  const watch=(frame:HTMLIFrameElement)=>{if(frames.has(frame))return;frames.add(frame);const attach=()=>{try{if(frame.contentDocument)this.attach(frame.contentDocument);}catch{}};frame.addEventListener('load',attach);registerRuntimeCleanup(this,frame,()=>frame.removeEventListener('load',attach));attach();};
   for(const frame of document.querySelectorAll('iframe'))watch(frame);
   const observer=new MutationObserver(records=>{for(const record of records)for(const node of record.addedNodes)if(node instanceof HTMLElement){if(node instanceof HTMLIFrameElement)watch(node);for(const frame of node.querySelectorAll('iframe'))watch(frame);}});
   observer.observe(document.body,{childList:true,subtree:true});this.register(()=>observer.disconnect());
@@ -83,7 +87,7 @@ export default class CanvasMindmap extends Plugin {
    if(this.connectHint)this.positionConnectHint();
    if(this.linkMenu)this.positionLinkMenu();
   },100));
-  this.registerEvent(this.app.workspace.on('active-leaf-change',()=>{this.clearConnectHint();this.panels.close(false);this.sizes.finish();this.reset();this.altTap=null;this.editorCamera.stop();this.navigation.badges(this.current());}));this.register(()=>{this.reset();this.clearConnectHint();});
+  this.registerEvent(this.app.workspace.on('active-leaf-change',()=>{this.clearConnectHint();this.panels.close(false);this.sizes.finish();this.reset();this.altTap=null;this.clearAltRepeat();this.editorCamera.stop();this.navigation.badges(this.current());}));this.register(()=>{this.reset();this.clearConnectHint();this.clearAltRepeat();});
  }
  private convertFile(c:Canvas,id:string,path:string){
   if(this.current()!==c||c.readonly||c.nodes.get(id)?.isEditing||!this.app.vault.getFileByPath(path)){new Notice('파일 또는 대상 카드를 찾을 수 없습니다.');return;}
@@ -91,7 +95,7 @@ export default class CanvasMindmap extends Plugin {
   this.sizes.finish();this.selections.observe(c);this.selections.capture(c);c.requestPushHistory.cancel?.();c.pushHistory(before);const history={data:[...c.history.data],current:c.history.current};
   try{c.setData(after);c.selectOnly(c.nodes.get(id));this.selections.capture(c);c.requestSave(false);}catch(error){c.importData(before,true);c.data=before;c.history.data=history.data;c.history.current=history.current;c.updateHistoryUI();c.requestSave(false);new Notice('파일을 넣지 못했습니다. 기존 카드를 유지합니다.');console.error(error);}
  }
- private arrange(c:Canvas){this.reset();this.clearConnectHint();this.sizes.finish();const n=this.selected(c);if(!n)return;const before:CanvasData=c.getData(),after=arrangeConnected(before,n.id,this.settings.gap);if(JSON.stringify(before)===JSON.stringify(after))return;this.selections.observe(c);this.selections.capture(c);c.requestPushHistory.cancel?.();c.pushHistory(before);const history={data:[...c.history.data],current:c.history.current};try{c.setData(after);this.selections.capture(c);c.requestSave(false);}catch(error){c.importData(before,true);c.data=before;c.history.data=history.data;c.history.current=history.current;c.updateHistoryUI();c.requestSave(false);new Notice('정렬하지 못했습니다. 원래 배치를 복원했습니다.');console.error(error);}}
+ private arrange(c:Canvas){this.reset();this.clearConnectHint();this.sizes.finish();const n=this.selected(c);if(!n)return;const before:CanvasData=c.getData(),after=arrangeConnected(before,n.id,this.settings.gap);if(JSON.stringify(before)===JSON.stringify(after))return;this.selections.observe(c);this.selections.capture(c);c.requestPushHistory.cancel?.();c.pushHistory(before);const history={data:[...c.history.data],current:c.history.current};try{for(const card of after.nodes){const node=c.nodes.get(card.id);if(node&&(node.x!==card.x||node.y!==card.y))node.moveTo({x:card.x,y:card.y});}c.requestPushHistory.cancel?.();c.data=after;c.pushHistory(c.getData());this.selections.capture(c);c.requestSave(false);}catch(error){c.importData(before,true);c.data=before;c.history.data=history.data;c.history.current=history.current;c.updateHistoryUI();c.requestSave(false);new Notice('정렬하지 못했습니다. 원래 배치를 복원했습니다.');console.error(error);}}
  private disconnect(c:Canvas,ids:Set<string>){
   this.reset();this.sizes.finish();this.selections.observe(c);this.selections.capture(c);
   const before:CanvasData=c.getData(),edges=before.edges.filter(e=>!ids.has(e.fromNode)&&!ids.has(e.toNode));if(edges.length===before.edges.length)return;
@@ -142,14 +146,14 @@ export default class CanvasMindmap extends Plugin {
  persist(){this.saveChain=this.saveChain.then(()=>this.saveData(this.settings)).catch(()=>{new Notice('Canvas Mindmap 설정을 저장하지 못했습니다.');});return this.saveChain;}
  private attach(doc:Document){
   if(this.docs.has(doc))return;this.docs.add(doc);
-  const down=(e:KeyboardEvent)=>this.keydown(e),up=(e:KeyboardEvent)=>this.keyup(e),blur=()=>{this.clearConnectHint();this.altTap=null;this.sizes.finish();this.reset();};
+  const down=(e:KeyboardEvent)=>this.keydown(e),up=(e:KeyboardEvent)=>this.keyup(e),blur=()=>{this.clearConnectHint();this.altTap=null;this.clearAltRepeat();this.sizes.finish();this.reset();};
   const keyboardTarget=doc.defaultView||doc;
   const pause=()=>this.editorCamera.pause(),resume=()=>this.editorCamera.resume();
-  const pointer=(e:PointerEvent)=>{this.panels.outside(e.target);if(e.button===1||e.button===2)this.editorCamera.pause();else this.editorCamera.resume();};
+  const pointer=(e:PointerEvent)=>{this.clearAltRepeat();this.panels.outside(e.target);if(e.button===1||e.button===2)this.editorCamera.pause();else this.editorCamera.resume();};
   doc.addEventListener('wheel',pause,{capture:true,passive:true});doc.addEventListener('input',resume,true);doc.addEventListener('pointerdown',pointer,true);
-  this.register(()=>{doc.removeEventListener('wheel',pause,true);doc.removeEventListener('input',resume,true);doc.removeEventListener('pointerdown',pointer,true);});
+  registerRuntimeCleanup(this,doc,()=>{doc.removeEventListener('wheel',pause,true);doc.removeEventListener('input',resume,true);doc.removeEventListener('pointerdown',pointer,true);});
   keyboardTarget.addEventListener('keydown',down as EventListener,true);keyboardTarget.addEventListener('keyup',up as EventListener,true);doc.defaultView?.addEventListener('blur',blur);
-  this.register(()=>{keyboardTarget.removeEventListener('keydown',down as EventListener,true);keyboardTarget.removeEventListener('keyup',up as EventListener,true);doc.defaultView?.removeEventListener('blur',blur);});
+  registerRuntimeCleanup(this,doc,()=>{keyboardTarget.removeEventListener('keydown',down as EventListener,true);keyboardTarget.removeEventListener('keyup',up as EventListener,true);doc.defaultView?.removeEventListener('blur',blur);});
  }
  private current():Canvas|null {const view=this.app.workspace.getActiveViewOfType(Object as any) as any;return view?.getViewType?.()==='canvas'?view.canvas:null;}
  private selected(c:Canvas){const s=[...c.selection] as any[];return s.length===1&&c.nodes.has(s[0].id)&&s[0].getData().type!=='group'?s[0]:null;}
@@ -174,7 +178,11 @@ export default class CanvasMindmap extends Plugin {
    }
    return originalImport.call(this,data,...args);
   };
-  c.importData=importWithTypes;this.register(()=>{if(c.importData===importWithTypes)c.importData=originalImport;});
+  c.importData=importWithTypes;registerRuntimeCleanup(this,c,()=>{if(c.importData===importWithTypes)c.importData=originalImport;});
+  this.inputScopes.get(c.view.scope)?.();
+  const cleanups:Array<()=>void>=[];
+  const cleanup=()=>{for(const cb of cleanups.reverse())cb();cleanups.length=0;};
+  this.inputScopes.set(c.view.scope,cleanup);registerRuntimeCleanup(this,c,cleanup);
   for(const binding of c.view.scope?.keys||[]){
    if(!binding.key?.startsWith('Arrow')&&binding.key!=='Enter')continue;
    const original=binding.func;
@@ -190,11 +198,11 @@ export default class CanvasMindmap extends Plugin {
     if(!editing&&!input&&!c.readonly)return;
     return original(e,...args);
    };
-   binding.func=wrapper;this.register(()=>{if(binding.func===wrapper)binding.func=original;});
+   binding.func=wrapper;cleanups.push(()=>{if(binding.func===wrapper)binding.func=original;});
   }
  }
  private keydown(e:KeyboardEvent){
-  if(e.key!=='Alt'&&this.altTap)this.altTap.clean=false;
+  if(e.key!=='Alt'){if(this.altTap)this.altTap.clean=false;this.clearAltRepeat();}
   if(document.querySelector('.menu'))return;
   if(this.fileInsert.key(e))return;
   if(this.panels.key(e))return;
@@ -256,12 +264,21 @@ export default class CanvasMindmap extends Plugin {
  }
  private begin(key:string,canvas:Canvas,anchor:string){
   this.reset();const hold:Hold={key,canvas,anchor,consumed:false,timer:0};this.hold=hold;
-  hold.timer=window.setTimeout(()=>{if(this.hold!==hold||this.current()!==canvas||this.selected(canvas)?.id!==anchor)return;hold.consumed=true;this.openMenu(key==='Control'?'mode':'source',canvas,anchor);},500);
+  hold.timer=window.setTimeout(()=>{if(this.hold!==hold||this.current()!==canvas||this.selected(canvas)?.id!==anchor)return;hold.consumed=true;this.openMenu(key==='Control'?'mode':'source',canvas,anchor);},200);
  }
  private keyup(e:KeyboardEvent){
   if(e.code==='KeyA'||e.key==='Control'||e.key==='Shift')this.clearConnectHint();
   if(e.key==='Control'||e.key==='Shift'){if(this.linkTimer!==null)window.clearTimeout(this.linkTimer);this.linkTimer=null;if(this.linkMenu&&!this.linkMenu.ids.length)this.clearLinkMenu();}
-  if(e.key==='Alt'&&this.altTap){const a=this.altTap;this.altTap=null;if(a.clean&&this.current()===a.c&&!e.ctrlKey&&!e.shiftKey&&!e.metaKey&&this.canUseCardCommand(a.c)){this.stop(e);this.reset();this.multiAnchor=null;if(a.c.selection.size)a.c.deselectAll();else this.navigation.selectNearest(a.c);}}
+  if(e.key==='Alt'&&this.altTap){const a=this.altTap;this.altTap=null;if(a.clean&&this.current()===a.c&&!e.ctrlKey&&!e.shiftKey&&!e.metaKey&&this.canUseCardCommand(a.c)){this.stop(e);this.reset();this.multiAnchor=null;
+   const c=a.c,ids=[...c.selection].filter((n:any)=>c.nodes.has(n.id)).map((n:any)=>n.id),prior=this.altRepeat;
+   if(prior&&prior.c===c&&JSON.stringify(prior.after)===JSON.stringify(ids)){
+    const targets=(prior.ids.length?prior.ids:ids).map(id=>c.nodes.get(id)).filter(Boolean);this.clearAltRepeat();
+    if(targets.length){this.navigation.cancel();c.deselectAll();for(const node of targets)c.select(node);c.zoomToSelection();}
+   }else{
+    this.clearAltRepeat();if(c.selection.size)c.deselectAll();else this.navigation.selectNearest(c);
+    const pending={c,ids,after:[...c.selection].filter((n:any)=>c.nodes.has(n.id)).map((n:any)=>n.id),timer:0};this.altRepeat=pending;
+    pending.timer=window.setTimeout(()=>{if(this.altRepeat===pending)this.altRepeat=null;},300);
+   }}}
   this.sizes.keyup(e.key);
   const hold=this.hold;if(!hold||e.key!==hold.key)return;if(e.key==='Tab')this.stop(e);this.clearTimer();
   if(this.menu){const m=this.menu,choice=m.values[m.index];if(m.kind==='mode')this.settings.mode=choice as Settings['mode'];else this.settings.origins[m.canvas.view.file.path]=choice;void this.persist();}
@@ -288,7 +305,7 @@ export default class CanvasMindmap extends Plugin {
    const id=crypto.randomUUID().replace(/-/g,'').slice(0,16);
    const after=createLayout(before,{anchor,id,direction,tab,width:this.settings.width!,height:this.settings.height!,gap:this.settings.gap,connected:this.settings.mode==='connect',source});
    c.requestPushHistory.cancel?.();c.pushHistory(before);const history={data:[...c.history.data],current:c.history.current};
-   try{applyCreation(c,before,after);c.selectOnly(c.nodes.get(id));this.selections.capture(c);this.navigation.focus(c,c.nodes.get(id));c.requestSave();}
+   try{applyCreation(c,before,after);c.selectOnly(c.nodes.get(id));this.selections.capture(c);this.navigation.focus(c,c.nodes.get(id));c.requestPushHistory.cancel?.();c.requestSave(false);}
    catch(error){c.setData(before);c.history.data=history.data;c.history.current=history.current;c.updateHistoryUI();if(selection[0]&&c.nodes.has(selection[0]))c.selectOnly(c.nodes.get(selection[0]));c.requestSave();throw error;}
   }catch(error){console.error('Canvas Mindmap creation failed',error);new Notice('카드를 생성하지 못했습니다. 기존 카드와 연결을 복원했습니다.');}
  }

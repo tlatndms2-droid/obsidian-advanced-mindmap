@@ -1,3 +1,4 @@
+import {registerRuntimeCleanup} from './runtime-cleanup';
 import type { App } from 'obsidian';
 import type { Card, CanvasData, Direction } from './layout';
 
@@ -35,7 +36,7 @@ export class NavigationController {
   if(this.patched.has(c))return;this.patched.add(c);
   const observer=new MutationObserver(()=>this.positionBadges(c));
   observer.observe(c.canvasEl,{attributes:true,attributeFilter:['style'],subtree:true});
-  this.host.register(()=>observer.disconnect());
+  registerRuntimeCleanup(this.host,c,()=>observer.disconnect());
   // Each native Canvas snapshot carries the separate waypoint namespace. Native
   // deletion snapshots omit missing cards; native Undo restores the prior namespace.
   const original=c.getData,controller=this;
@@ -44,7 +45,7 @@ export class NavigationController {
    if(namespace?.waypoints){const entries=controller.registry(data);for(const [number,entry] of Object.entries(entries))if(entry.kind==='card'&&!data.nodes.some(n=>n.id===entry.node))delete entries[number];return {...data,canvasMindmap:{...namespace,waypoints:entries}};}
    return data;
   };
-  c.getData=wrapper;this.host.register(()=>{if(c.getData===wrapper)c.getData=original;});
+  c.getData=wrapper;registerRuntimeCleanup(this.host,c,()=>{if(c.getData===wrapper)c.getData=original;});
  }
  focus(c:any,n:any){this.move(c,n.x+n.width/2,n.y+n.height/2,c.zoom);}
  selectNearest(c:any){

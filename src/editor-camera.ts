@@ -1,3 +1,4 @@
+import {registerRuntimeCleanup} from './runtime-cleanup';
 interface Host {
  settings:{followCaret:boolean;editMinZoom:number};
  register(cb:()=>void):void;
@@ -21,7 +22,7 @@ export class EditorCamera {
     return result;
    };
    n.startEditing=wrapper;
-   this.host.register(()=>{if(n.startEditing===wrapper)n.startEditing=original;});
+   registerRuntimeCleanup(this.host,n,()=>{if(n.startEditing===wrapper)n.startEditing=original;});
   }
  }
  exit(c:any,n:any){

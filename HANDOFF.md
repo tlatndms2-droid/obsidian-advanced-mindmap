@@ -1,3 +1,21 @@
+# 0.5.21 — Alt 두 번 선택 맞춤 확대 / 미배포
+
+Alt 단독을 300ms 안에 두 번 누르면 처음 선택한 카드들을 복원하여 Obsidian의 native zoomToSelection(Shift+2) 실행. Alt 한 번 keyup 선택·해제 유지. 다른 키·포인터·창 포커스 변경·Canvas 전환 시 두 번 판정 취소. 편집 중 차단.
+타입·10개 코드 검사·빌드 통과. Sandbox 전체 재시작 후 단일/다중 선택의 Shift+2와 좌표/배율 일치, 단일 Alt·Alt+방향키 분리, 편집 중 차단 통과. 증거 verification/artifacts/alt-0521/alt-double.json. 0.5.21 Sandbox 열어둠, 배포 없음.
+
+# 0.5.20 — Ctrl/Tab 메뉴 0.2초 / 미배포
+
+Ctrl 및 Tab hold만 500ms→200ms. Ctrl+Shift 연결 메뉴는 기존 500ms 유지. 타입·빌드 통과. Sandbox 재시작 후 Ctrl 약205ms / Tab 약207ms 표시, 90ms 미표시, 해제 시 닫기 및 짧은 Tab 한 번 생성 통과. verification/artifacts/hold-0520/hold.json. Sandbox 0.5.20 열어둠, 배포/push/BRAT 없음.
+
+# 0.5.19 — Undo/Redo·파일 전환 누적·정렬 지연 수정 / 미배포
+
+2026-10-21 사용자 요청으로 세 문제 수정. 배포 금지: push/Release/BRAT 없음. 공개 0.5.18 유지.
+- 지연 이력 기록이 빠른 Undo/Redo를 덮어쓰는 경로 차단. 즉시 입력 10회 카드·연결·선택 복원 통과.
+- 닫힌 Canvas/카드/iframe/document 정리 참조를 약한 참조로 관리, 재사용 입력 영역의 이전 처리 제거. 500카드 전환 추가40회에서 DOM/리스너 수 동일.
+- 정렬 결과는 유지하고 변경된 좌표만 적용. 500 직접 연결 정렬: 이전607ms → 최종 재시작 후 5회 중앙값96.8ms. 연결 부착면·Undo/Redo 유지.
+- 타입·10개 코드 검사·빌드·실제 Sandbox 회귀·전체 재시작 및 최종 설치파일 해시 일치. 상세 verification/FIX-0.5.19.md.
+- Sandbox 1.14.4 / port9267 / Canvas-Mindmap-Sandbox / 0.5.19 열어둠. 장시간 사용 및 BRAT는 검증 범위 아님.
+
 # 0.5.18 통합 배포 완료 — 2026-10-21
 
 Release: https://github.com/tlatndms2-droid/obsidian-advanced-mindmap/releases/tag/0.5.18

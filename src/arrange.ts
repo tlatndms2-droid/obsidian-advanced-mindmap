@@ -6,11 +6,13 @@ export function arrangeConnected(input:CanvasData,id:string,gap:number):CanvasDa
  if(!anchor||!Number.isFinite(gap)||gap<0)return data;
  const ids=new Set(input.edges.flatMap(e=>e.fromNode===id?[e.toNode]:e.toNode===id?[e.fromNode]:[]));ids.delete(id);
  const overlap=(a:Card,b:Card)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
+ const faces=new Map<string,Set<string>>();
+ for(const e of input.edges){const other=e.fromNode===id?e.toNode:e.toNode===id?e.fromNode:null,side=e.fromNode===id?e.fromSide:e.toSide;if(other&&['left','right','top','bottom'].includes(String(side))){const set=faces.get(other)||new Set<string>();set.add(String(side));faces.set(other,set);}}
  const neighbours=data.nodes.filter(n=>ids.has(n.id)&&n.type!=='group');
  const groups:Card[][]=[[],[],[],[]];
  const movable=new Set<string>();
  for(const n of neighbours){
-  const sides=new Set(input.edges.filter(e=>e.fromNode===id&&e.toNode===n.id||e.toNode===id&&e.fromNode===n.id).map(e=>e.fromNode===id?e.fromSide:e.toSide).filter(s=>['left','right','top','bottom'].includes(String(s))));
+  const sides=faces.get(n.id)||new Set<string>();
   // Conflicting attachment faces cannot be assigned to one row without changing the user's layout.
   if(sides.size>1)continue;
   const dx=n.x+n.width/2-anchor.x-anchor.width/2,dy=n.y+n.height/2-anchor.y-anchor.height/2;
