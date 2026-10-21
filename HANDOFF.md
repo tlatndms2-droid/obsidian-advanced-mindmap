@@ -1,3 +1,13 @@
+# 0.5.21 통합 배포 완료 — 2026-10-21
+
+사용자가 0.5.19–0.5.21 전체 변경 배포 승인. 아래 미배포 문구는 당시 이력이며 현재 공개 버전은 0.5.21.
+Release: https://github.com/tlatndms2-droid/obsidian-advanced-mindmap/releases/tag/0.5.21
+소스 facfc37. 타입·10개 코드 검사·빌드·Sandbox 설치파일 일치 확인. 공개 main.js·manifest.json·styles.css 다운로드 후 로컬 최종 빌드 바이트 일치.
+main.js SHA256 e8c4f86d50dfca9fa058598e16261136b13d8b0b44c1b736952bedca1c5cefde
+manifest.json SHA256 9e36362dbb6fc89cb7a82fcb03f3b4ff8407f0753c24686aa8839ade5b596d64
+styles.css SHA256 1781d548a9241e7bec0e1690c91ecde9cb3c52dfc5f9818243fb4acd3a872d08
+BRAT 설치·업데이트 시험은 기존 사용자 생략 요청 유지. Sandbox 열어둠.
+
 # 0.5.21 — Alt 두 번 선택 맞춤 확대 / 미배포
 
 Alt 단독을 300ms 안에 두 번 누르면 처음 선택한 카드들을 복원하여 Obsidian의 native zoomToSelection(Shift+2) 실행. Alt 한 번 keyup 선택·해제 유지. 다른 키·포인터·창 포커스 변경·Canvas 전환 시 두 번 판정 취소. 편집 중 차단.
