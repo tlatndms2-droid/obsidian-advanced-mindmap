@@ -1130,7 +1130,7 @@
     "change": "Centre nearby group bounds on anchor; retain distant positions"
   },
   "nextPhase": 7,
-  "current_status": "0.5.14-sandbox-restart-passed-release-pending",
+  "current_status": "0.5.14-released-sandbox-restart-and-assets-verified",
   "stage5_status": "implemented-user-confirmed-scenarios-not-exhaustive",
   "stage6_status": "code-checks-passed-user-ui-confirmed",
   "current_spec": "planning/revised/STAGE5_CURRENT.md",
@@ -1138,9 +1138,9 @@
   "user_checklist": "verification/stage6-user-check.md",
   "status_note": "Per-case historical automated results remain unchanged. User confirmed all current features. Uninstall/reinstall preservation review and BRAT validation explicitly waived; do not claim these passed.",
   "release": {
-    "version": "0.5.13",
-    "url": "https://github.com/tlatndms2-droid/obsidian-advanced-mindmap/releases/tag/0.5.13",
-    "source_commit": "66ff9f4",
+    "version": "0.5.14",
+    "url": "https://github.com/tlatndms2-droid/obsidian-advanced-mindmap/releases/tag/0.5.14",
+    "source_commit": "7e3afe9",
     "public_assets": "all-three-byte-identical",
     "brat": "skipped-by-explicit-user-request"
   }

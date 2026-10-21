@@ -1,4 +1,7 @@
-# 0.5.14 — 선택 카드 Enter 미디어 동작
+# 0.5.14 — 선택 카드 Enter 미디어 동작 / 배포 완료
+
+Release: https://github.com/tlatndms2-droid/obsidian-advanced-mindmap/releases/tag/0.5.14
+소스 7e3afe9. 공개 다운로드 파일 3개와 최종 빌드 바이트 일치 확인.
 
 2026-10-21 사용자 승인: 영상·YouTube·음악 카드 선택 후 Enter 재생, 이미지 카드 Enter 확대 보기. PDF 기존 기능 유지.
 - 영상·음악은 기존 카드의 플레이어를 재생하고, 이미지에는 기존 미리보기 창을 재사용한다. Esc/Ctrl+Enter 닫기 후 카드 선택 유지.
