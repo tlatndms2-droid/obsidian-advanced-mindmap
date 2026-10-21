@@ -15,7 +15,7 @@ export function nearestCard(data:CanvasData,id:string,direction:Direction):Card|
 }
 export type Waypoint={kind:'card';node:string;name:string}|{kind:'camera';x:number;y:number;zoom:number;name:string};
 type Registry=Record<string,Waypoint>;
-interface Host {app:App;settings:{panDuration:number};register(cb:()=>void):void}
+interface Host {app:App;settings:{panDuration:number;panStep?:number;zoomStepPercent?:number};register(cb:()=>void):void}
 export class NavigationController {
  private patched=new WeakSet<object>();
  private overlays=new Map<any,HTMLElement>();
@@ -53,9 +53,9 @@ export class NavigationController {
   if(cards[0]){c.selectOnly(cards[0]);this.focus(c,cards[0]);}
  }
  cameraKey(c:any,code:string){
-  this.cancel();const step=60/Math.pow(2,c.zoom);
+  this.cancel();const pan=this.host.settings.panStep,percent=this.host.settings.zoomStepPercent;const step=(Number.isFinite(pan)&&pan!>0?pan!:60)/Math.pow(2,c.zoom),zoomStep=Number.isFinite(percent)&&percent!>0?Math.log2(1+percent!/100):0.1;
   const x=c.tx+(code==='ArrowRight'?step:code==='ArrowLeft'?-step:0),y=c.ty+(code==='ArrowDown'?step:code==='ArrowUp'?-step:0);
-  const zoom=Math.max(c.config.minZoom??-4,Math.min(c.config.maxZoom??2,c.tZoom+(code==='BracketRight'?0.1:code==='BracketLeft'?-0.1:0)));
+  const zoom=Math.max(c.config.minZoom??-4,Math.min(c.config.maxZoom??2,c.tZoom+(code==='ZoomIn'?zoomStep:code==='ZoomOut'?-zoomStep:0)));
   c.tx=x;c.ty=y;c.tZoom=zoom;c.zoomCenter=null;c.markViewportChanged();
  }
  navigate(c:any,n:any,direction:Direction){const target=nearestCard(c.getData(),n.id,direction);if(!target)return;const node=c.nodes.get(target.id);c.selectOnly(node);this.move(c,target.x+target.width/2,target.y+target.height/2,c.zoom);}

@@ -11,31 +11,22 @@ export function swapCards(input:CanvasData,id:string,down:boolean,tolerance:numb
  bottom.x=first.x;bottom.y=first.y;top.x=last.x;top.y=first.y+last.height+gap;
  return data;
 }
-export interface SizeSettings { resizeStep:number; swapTolerance:number; autoResize:boolean; width:number|null; height:number|null }
+export interface SizeSettings { resizeStep:number; swapTolerance:number; width:number|null; height:number|null }
 interface Host { app:App; settings:SizeSettings; register(cb:()=>void):void }
 function snapshotKey(value:unknown):string|undefined{return JSON.stringify(value,(_key,item)=>item&&typeof item==='object'&&!Array.isArray(item)?Object.fromEntries(Object.keys(item).sort().map(key=>[key,item[key]])):item);}
 export class SizeController {
  private hold:{c:any;id:string;key:string;before:CanvasData}|null=null;
- private patched=new WeakSet<object>();
- private pending=new Map<any,number>();
  private disposed=false;
  private canvases=new WeakSet<object>();
  private committed=new WeakMap<object,string>();
- constructor(private host:Host){host.register(()=>{this.finish();this.disposed=true;for(const timer of this.pending.values())window.clearTimeout(timer);this.pending.clear();});}
+ constructor(private host:Host){host.register(()=>{this.finish();this.disposed=true;});}
  observe(c:any){
   if(!this.canvases.has(c)){
    this.canvases.add(c);const history=c.history,original=history.push,controller=this;
    const wrapper=function(this:any,data:CanvasData){if(controller.hold?.c===c)return;if(snapshotKey(this.data[this.current])===snapshotKey(data))return;return original.call(this,data);};
    history.push=wrapper;this.host.register(()=>{if(history.push===wrapper)history.push=original;});
   }
-  for(const n of c.nodes.values()){
-   if(this.patched.has(n))continue;this.patched.add(n);
-   const original=n.setIsEditing,controller=this;
-   const wrapper=function(this:any,value:boolean){const was=this.isEditing;const result=original.call(this,value);if(value){const timer=controller.pending.get(this);if(timer)window.clearTimeout(timer);}if(was&&!value&&controller.host.settings.autoResize&&this.getData().type==='text'){
-    const timer=window.setTimeout(()=>{controller.pending.delete(this);void controller.autoFit(c,this).catch(error=>console.error('Canvas Mindmap Auto Resize failed',error));},150);controller.pending.set(this,timer);
-   }return result;};
-   n.setIsEditing=wrapper;this.host.register(()=>{if(n.setIsEditing===wrapper)n.setIsEditing=original;});
-  }
+
  }
  keyup(key:string){if(this.hold&&(key===this.hold.key||key==='Control'||key==='Shift'))this.finish();}
  finish(){const h=this.hold;if(!h)return;this.hold=null;h.c.requestPushHistory.cancel?.();const after=h.c.getData();if(JSON.stringify(after)!==JSON.stringify(h.before)){h.c.pushHistory(after);this.committed.set(h.c,JSON.stringify(after));h.c.requestSave();}}
@@ -54,10 +45,22 @@ export class SizeController {
   c.requestPushHistory.cancel?.();c.pushHistory(before);const history={data:[...c.history.data],current:c.history.current};
   try{c.setData(after);this.committed.set(c,JSON.stringify(c.getData()));c.requestSave();}catch(error){c.importData(before,true);c.history.data=history.data;c.history.current=history.current;c.updateHistoryUI();c.requestSave();throw error;}
  }
+ private fitting=false;
+ async fitSelection(c:any){
+  if(this.fitting||c.readonly||[...c.nodes.values()].some((n:any)=>n.isEditing))return;
+  const nodes=[...c.selection].filter((n:any)=>n.getData().type==='text'&&c.nodes.get(n.id)===n) as any[];
+  if(!nodes.length)return;this.fitting=true;this.finish();
+  const before:CanvasData=structuredClone(c.getData()),after=structuredClone(before),ids=[...c.selection].map((n:any)=>n.id);
+  try{
+   for(const n of nodes){const size=await this.autoFit(c,n);if(size)Object.assign(after.nodes.find(v=>v.id===n.id)!,size);}
+   if(this.disposed||c.readonly||[...c.nodes.values()].some((n:any)=>n.isEditing)||snapshotKey(before)!==snapshotKey(c.getData()))return;
+   if(snapshotKey(before)!==snapshotKey(after)){this.apply(c,before,after);c.selectAll(ids.map((id:string)=>c.nodes.get(id)).filter(Boolean));}
+  }finally{this.fitting=false;}
+ }
  private async autoFit(c:any,n:any){
-  if(this.disposed||!this.host.settings.autoResize||n.isEditing||c.readonly||c.nodes.get(n.id)!==n)return;
+  if(this.disposed||n.isEditing||c.readonly||c.nodes.get(n.id)!==n)return;
   const initialText=n.text,width=n.width;
-  if(!String(initialText||'').trim()){const defaults=c.config.defaultTextNodeDimensions,w=this.host.settings.width??defaults.width,h=this.host.settings.height??defaults.height;if(n.width!==w||n.height!==h){this.finish();const before:CanvasData=c.getData(),after=structuredClone(before);const card=after.nodes.find(v=>v.id===n.id)!;card.width=w;card.height=h;this.apply(c,before,after);}return;}
+  if(!String(initialText||'').trim()){const defaults=c.config.defaultTextNodeDimensions,w=this.host.settings.width??defaults.width,h=this.host.settings.height??defaults.height;if(n.width!==w||n.height!==h){return {width:w,height:h};}return;}
   const owner=n.nodeEl.ownerDocument;
   const measure=owner.body.createDiv({cls:'canvas-node canvas-mindmap-measure'});
   Object.assign(measure.style,{position:'fixed',left:'-100000px',top:'0',width:`${width}px`,height:'auto',transform:'none',visibility:'hidden',pointerEvents:'none'});
@@ -75,7 +78,7 @@ export class SizeController {
    // Canvas preview wraps each rendered block; retain that structure so paragraph margins match.
    for(const child of [...sizer.children]){const block=owner.createElement('div');block.className=`el-${child.tagName.toLowerCase()}`;child.replaceWith(block);block.appendChild(child);}
    await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));
-   if(this.disposed||!this.host.settings.autoResize||n.isEditing||c.nodes.get(n.id)!==n||n.text!==initialText||n.width!==width)return;
+   if(this.disposed||n.isEditing||c.nodes.get(n.id)!==n||n.text!==initialText||n.width!==width)return;
    // Native Canvas uses size containment on the container; its own rect is not content height.
    const cs=getComputedStyle(container),cc=getComputedStyle(content);
    const px=(s:string)=>parseFloat(s)||0;
@@ -99,8 +102,7 @@ export class SizeController {
     if(next===height)break;height=next;
    }
    if(!Number.isFinite(height)||(height===n.height&&fittedWidth===n.width))return;
-   const before:CanvasData=c.getData(),after:CanvasData=JSON.parse(JSON.stringify(before));const card=after.nodes.find(v=>v.id===n.id)!;card.height=height;card.width=fittedWidth;
-   this.finish();this.apply(c,before,after);
+   return {width:fittedWidth,height};
   }finally{component.unload();measure.remove();}
  }
 }

@@ -14,19 +14,21 @@ import { SelectionHistory } from './selection-history';
 import { SizeController } from './size';
 import { NavigationController, nearestCard } from './navigation';
 type Canvas = any;
-interface Settings { mode: 'create'|'connect'; width: number|null; height:number|null; gap:number; origins:Record<string,string>;resizeStep:number;swapTolerance:number;autoResize:boolean;panDuration:number;followCaret:boolean;editMinZoom:number;customColors:string[];managerSize:{width:number;height:number}|null }
+interface Settings { mode: 'create'|'connect'; width: number|null; height:number|null; gap:number; origins:Record<string,string>;resizeStep:number;swapTolerance:number;panDuration:number;panStep:number;zoomStepPercent:number;followCaret:boolean;editMinZoom:number;customColors:string[];managerSize:{width:number;height:number}|null }
+const settingDefaults={mode:'create' as const,width:null as number|null,height:null as number|null,gap:100,resizeStep:20,swapTolerance:40,panDuration:250,panStep:60,zoomStepPercent:(2**0.1-1)*100,followCaret:true,editMinZoom:100};
 interface Hold { key:string; timer:number; canvas:Canvas; anchor:string; consumed:boolean }
 interface MenuState { el:HTMLElement; values:string[]; index:number; kind:'mode'|'source'; canvas:Canvas; anchor:string }
 export default class CanvasMindmap extends Plugin {
  readonly implementationStage = 4;
- settings:Settings={mode:'create',width:null,height:null,gap:100,origins:{},resizeStep:20,swapTolerance:40,autoResize:false,panDuration:250,followCaret:true,editMinZoom:100,customColors:[],managerSize:null};
+ settings:Settings={...settingDefaults,origins:{},customColors:[],managerSize:null};
  private panels!:CanvasPanels;
  private fileInsert!:FileInsertMenu;
  private sizes!:SizeController;
  private navigation!:NavigationController;
  private selections!:SelectionHistory;
  private editorCamera!:EditorCamera;
- private altTap:{down:number;last:number;clean:boolean;c:any}|null=null;
+ private altTap:{clean:boolean;c:any}|null=null;
+ private multiAnchor:{c:any;id:string}|null=null;
  private connectHeld:Canvas|null=null;
  private cardMedia!:CardMedia;
  private handledConnectionEvents=new WeakSet<Event>();
@@ -41,7 +43,7 @@ export default class CanvasMindmap extends Plugin {
  private colorCommands=new Set<string>();
  private saveChain=Promise.resolve();
  async onload() {
-  const saved=await this.loadData();this.settings={...this.settings,...saved,origins:saved?.origins||{}};
+  const saved=await this.loadData();if(saved)delete saved.autoResize;this.settings={...this.settings,...saved,origins:saved?.origins||{}};
   this.sizes=new SizeController(this);
   this.cardMedia=new CardMedia(this.app,()=>this.current());this.register(()=>this.cardMedia.dispose());
   this.navigation=new NavigationController(this);
@@ -66,7 +68,8 @@ export default class CanvasMindmap extends Plugin {
   this.syncColorCommands();
   this.editorCamera=new EditorCamera(this);
   this.selections=new SelectionHistory(cb=>this.register(cb));
-  this.addCommand({id:'toggle-auto-resize',name:'Toggle Auto Resize',hotkeys:[{modifiers:['Ctrl','Shift'],key:'r'}],callback:()=>{this.settings.autoResize=!this.settings.autoResize;void this.persist();new Notice(`Auto Resize: ${this.settings.autoResize?'ON':'OFF'}`);}});
+  this.addCommand({id:'toggle-auto-resize',name:'선택한 카드 내용에 맞추기',hotkeys:[{modifiers:['Ctrl','Shift'],key:'r'}],checkCallback:checking=>{const c=this.current();if(!this.canUseCardCommand(c)||![...c.selection].some((n:any)=>n.getData().type==='text'))return false;if(!checking){this.reset();void this.sizes.fitSelection(c).catch(error=>{console.error(error);new Notice('카드 크기를 맞추지 못했습니다.');});}return true;}});
+  this.addCommand({id:'card-context-menu',name:'선택한 카드 우클릭 메뉴',hotkeys:[{modifiers:['Alt'],key:'m'}],checkCallback:checking=>{const c=this.current();if(!this.canUseCardCommand(c)||!this.selected(c))return false;if(!checking){if(this.altTap)this.altTap.clean=false;this.reset();const n=this.selected(c),r=n.nodeEl.getBoundingClientRect();n.nodeEl.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true,view:window,button:2,clientX:r.left+r.width/2,clientY:r.top+Math.min(30,r.height/2)}));}return true;}});
   this.addSettingTab(new CreationSettings(this));this.attach(document);
   const frames=new WeakSet<HTMLIFrameElement>();
   const watch=(frame:HTMLIFrameElement)=>{if(frames.has(frame))return;frames.add(frame);const attach=()=>{try{if(frame.contentDocument)this.attach(frame.contentDocument);}catch{}};this.registerDomEvent(frame,'load',attach);attach();};
@@ -151,6 +154,7 @@ export default class CanvasMindmap extends Plugin {
  private current():Canvas|null {const view=this.app.workspace.getActiveViewOfType(Object as any) as any;return view?.getViewType?.()==='canvas'?view.canvas:null;}
  private selected(c:Canvas){const s=[...c.selection] as any[];return s.length===1&&c.nodes.has(s[0].id)&&s[0].getData().type!=='group'?s[0]:null;}
  private initializeDimensions(c:Canvas){const d=c.config?.defaultTextNodeDimensions;if(d&&Number.isFinite(d.width)&&Number.isFinite(d.height)&&(this.settings.width===null||this.settings.height===null)){this.settings.width??=d.width;this.settings.height??=d.height;void this.persist();}}
+ private canUseCardCommand(c:Canvas){return c&&!c.readonly&&![...c.nodes.values()].some((n:any)=>n.isEditing)&&!document.activeElement?.closest('input,textarea,[contenteditable="true"],.modal-container')&&!document.querySelector('.menu');}
  private stop(e:KeyboardEvent){e.preventDefault();e.stopImmediatePropagation();}
  private mediaKey(e:KeyboardEvent,c:Canvas){
   if(e.key!=='Enter'||e.ctrlKey||e.shiftKey||e.altKey||e.metaKey||e.isComposing||c.readonly||this.menu||this.linkMenu)return false;
@@ -175,6 +179,7 @@ export default class CanvasMindmap extends Plugin {
    if(!binding.key?.startsWith('Arrow')&&binding.key!=='Enter')continue;
    const original=binding.func;
    const wrapper=(e:KeyboardEvent,...args:any[])=>{
+    if(document.querySelector('.menu'))return original(e,...args);
     if(this.fileInsert.key(e))return false;
     if(this.panels.capturesCanvasKeys(c)&&this.panels.key(e))return false;
     if(this.linkMenuKey(e,c)||this.connectionKey(e,c))return false;
@@ -189,9 +194,10 @@ export default class CanvasMindmap extends Plugin {
   }
  }
  private keydown(e:KeyboardEvent){
+  if(e.key!=='Alt'&&this.altTap)this.altTap.clean=false;
+  if(document.querySelector('.menu'))return;
   if(this.fileInsert.key(e))return;
   if(this.panels.key(e))return;
-  if(e.key!=='Alt'&&this.altTap){this.altTap.clean=false;this.altTap.last=0;}
   const c=this.current();if(!c||c.readonly||e.isComposing)return;const n=this.selected(c);
   const target=e.target as HTMLElement;
   const editing=[...c.nodes.values()].some((node:any)=>node.isEditing);
@@ -218,8 +224,9 @@ export default class CanvasMindmap extends Plugin {
   if(!editing&&n&&e.ctrlKey&&e.shiftKey&&!e.altKey&&!e.metaKey&&(e.key==='Control'||e.key==='Shift')){if(!e.repeat){this.reset();this.linkTimer=window.setTimeout(()=>{this.linkTimer=null;if(this.current()===c&&this.selected(c)?.id===n.id&&!n.isEditing)this.showLinkMenu(c,n.id,[]);},500);}return;}
   if(e.key!=='Control'&&e.key!=='Shift'&&this.linkTimer!==null){window.clearTimeout(this.linkTimer);this.linkTimer=null;}
   if(editing&&!e.ctrlKey&&!e.altKey&&!e.metaKey)this.editorCamera.resume();
-  if(!editing&&!e.ctrlKey&&!e.altKey&&!e.metaKey&&((e.shiftKey&&e.key.startsWith('Arrow'))||(!e.shiftKey&&['BracketLeft','BracketRight'].includes(e.code)))){this.stop(e);this.reset();this.navigation.cameraKey(c,e.code);return;}
-  if(!editing&&e.key==='Alt'&&!e.ctrlKey&&!e.shiftKey&&!e.metaKey){this.stop(e);if(!e.repeat){const last=this.altTap&&this.altTap.c===c?this.altTap.last:0;this.altTap={down:performance.now(),last,clean:true,c};if(c.selection.size===0)this.navigation.selectNearest(c);}return;}
+  if(!editing&&!e.ctrlKey&&!e.metaKey&&e.shiftKey&&e.key.startsWith('Arrow')&&(!e.altKey||e.key==='ArrowUp'||e.key==='ArrowDown')){this.stop(e);this.reset();this.navigation.cameraKey(c,e.altKey?(e.key==='ArrowUp'?'ZoomIn':'ZoomOut'):e.code);return;}
+  if(!editing&&e.ctrlKey&&e.shiftKey&&e.altKey&&!e.metaKey&&e.key.startsWith('Arrow')){this.stop(e);this.reset();if(e.repeat)return;const cards=[...c.selection].filter((v:any)=>c.nodes.has(v.id)&&v.getData().type!=='group') as any[];if(!cards.length)return;const anchor=this.multiAnchor?.c===c&&cards.some(v=>v.id===this.multiAnchor!.id)?this.multiAnchor!.id:cards[cards.length-1].id;const next=nearestCard(c.getData(),anchor,e.key.slice(5).toLowerCase() as Direction);if(next){const node=c.nodes.get(next.id);c.select(node);this.multiAnchor={c,id:node.id};this.navigation.focus(c,node);}return;}
+  if(!editing&&e.key==='Alt'&&!e.ctrlKey&&!e.shiftKey&&!e.metaKey){this.stop(e);if(!e.repeat)this.altTap={clean:true,c};return;}
   if(!editing&&!(e.ctrlKey&&e.code==='KeyZ'))this.selections.capture(c);
   const number=/^Numpad([1-9])$/.exec(e.code)?.[1];
   if(number&&!e.altKey&&!editing&&!target?.closest?.('input,textarea,[contenteditable="true"],.modal-container')){
@@ -254,7 +261,7 @@ export default class CanvasMindmap extends Plugin {
  private keyup(e:KeyboardEvent){
   if(e.code==='KeyA'||e.key==='Control'||e.key==='Shift')this.clearConnectHint();
   if(e.key==='Control'||e.key==='Shift'){if(this.linkTimer!==null)window.clearTimeout(this.linkTimer);this.linkTimer=null;if(this.linkMenu&&!this.linkMenu.ids.length)this.clearLinkMenu();}
-  if(e.key==='Alt'&&this.altTap){const a=this.altTap,now=performance.now();if(a.clean&&now-a.down<=300&&this.current()===a.c){this.stop(e);if(a.last&&now-a.last<=300){this.navigation.selectNearest(a.c);a.last=0;}else a.last=now;}else a.last=0;a.clean=false;}
+  if(e.key==='Alt'&&this.altTap){const a=this.altTap;this.altTap=null;if(a.clean&&this.current()===a.c&&!e.ctrlKey&&!e.shiftKey&&!e.metaKey&&this.canUseCardCommand(a.c)){this.stop(e);this.reset();this.multiAnchor=null;if(a.c.selection.size)a.c.deselectAll();else this.navigation.selectNearest(a.c);}}
   this.sizes.keyup(e.key);
   const hold=this.hold;if(!hold||e.key!==hold.key)return;if(e.key==='Tab')this.stop(e);this.clearTimer();
   if(this.menu){const m=this.menu,choice=m.values[m.index];if(m.kind==='mode')this.settings.mode=choice as Settings['mode'];else this.settings.origins[m.canvas.view.file.path]=choice;void this.persist();}
@@ -288,15 +295,41 @@ export default class CanvasMindmap extends Plugin {
 }
 class CreationSettings extends PluginSettingTab {
  constructor(private plugin:CanvasMindmap){super(plugin.app,plugin);}
+ private resetButton(row:Setting,key:keyof typeof settingDefaults){
+  row.settingEl.dataset.settingKey=key;
+  row.addExtraButton(b=>b.setIcon('rotate-ccw').setTooltip('기본값으로 복원').onClick(async()=>{
+   let value:any=settingDefaults[key];
+   if(key==='width'||key==='height'){const c=(this.app.workspace.getActiveViewOfType(Object as any) as any)?.canvas;value=c?.config?.defaultTextNodeDimensions?.[key]??null;}
+   (this.plugin.settings as any)[key]=value;await this.plugin.persist();
+   // Keep the current settings window viewport and keyboard focus across rebuilding controls.
+   const positions:{el:HTMLElement;top:number;left:number}[]=[];
+   for(let el:HTMLElement|null=this.containerEl;el;el=el.parentElement)positions.push({el,top:el.scrollTop,left:el.scrollLeft});
+   this.display();
+   this.containerEl.querySelector<HTMLElement>(`[data-setting-key="${key}"] .extra-setting-button`)?.focus({preventScroll:true});
+   for(const {el,top,left} of positions){el.scrollTop=top;el.scrollLeft=left;}
+  }));
+ }
+ private cameraSlider(key:'panStep'|'zoomStepPercent'|'editMinZoom'|'panDuration',label:string,desc:string,min:number,max:number,step:number,unit:string){
+  const row=new Setting(this.containerEl).setName(label).setDesc(desc),current=this.plugin.settings[key];
+  row.settingEl.addClass('cm-camera-setting');
+  const value=row.controlEl.createSpan({cls:'cm-setting-value',text:`${Number(current.toFixed(2))}${unit}`});
+  value.setAttribute('aria-live','polite');
+  row.addSlider(slider=>{slider.setLimits(Math.min(min,current),Math.max(max,current),step).setValue(current).onChange(async n=>{this.plugin.settings[key]=n;value.textContent=`${Number(n.toFixed(2))}${unit}`;await this.plugin.persist();});slider.sliderEl.setAttribute('aria-label',label);});
+  this.resetButton(row,key);
+ }
  display(){this.containerEl.empty();this.containerEl.createEl('h2',{text:'Canvas Mindmap'});this.containerEl.createEl('h3',{text:'카드 생성'});
-  new Setting(this.containerEl).setName('생성 모드').setDesc('모든 캔버스에 적용하며 마지막 선택을 저장합니다.').addDropdown(d=>d.addOption('create','일반 생성').addOption('connect','연결 생성').setValue(this.plugin.settings.mode).onChange(async value=>{this.plugin.settings.mode=value as Settings['mode'];await this.plugin.persist();}));
-  for(const [key,label] of [['width','새 카드 기본 너비'],['height','새 카드 기본 높이'],['gap','카드 사이 간격']] as const)new Setting(this.containerEl).setName(label).setDesc('캔버스 기준 픽셀(px)').addText(text=>text.setPlaceholder('Obsidian 기본값').setValue(String(this.plugin.settings[key]??'')).onChange(async value=>{const number=Number(value);if(!value.trim()||!Number.isFinite(number)||(key==='gap'?number<0:number<=0))return;this.plugin.settings[key]=number;await this.plugin.persist();}));
-  this.containerEl.createEl('h3',{text:'크기 및 화면 이동'});
-  for(const [key,label] of [['resizeStep','크기 조절 단위'],['swapTolerance','위치 교환 시 가로 정렬 허용 오차']] as const)new Setting(this.containerEl).setName(label).setDesc('캔버스 기준 픽셀(px)').addText(text=>text.setValue(String(this.plugin.settings[key])).onChange(async value=>{const number=Number(value);if(!value.trim()||!Number.isFinite(number)||(key==='resizeStep'?number<=0:number<0))return;this.plugin.settings[key]=number;await this.plugin.persist();}));
-  new Setting(this.containerEl).setName('내용에 맞춰 크기 자동 조절').setDesc('편집을 마치면 짧은 글은 너비를 줄이고, 긴 글은 현재 너비 안에서 줄바꿈하며 높이를 내용에 맞춥니다.').addToggle(toggle=>toggle.setValue(this.plugin.settings.autoResize).onChange(async value=>{this.plugin.settings.autoResize=value;await this.plugin.persist();}));
-  new Setting(this.containerEl).setName('편집 시 최소 확대율').setDesc('편집 시 최소 확대율 (%). 기본 100%. 이미 더 확대되어 있으면 유지합니다. 캔버스 지원 범위: 6.25–200%.').addText(text=>text.setValue(String(this.plugin.settings.editMinZoom)).onChange(async value=>{const number=Number(value);if(!value.trim()||!Number.isFinite(number)||number<6.25||number>200){text.inputEl.setCustomValidity('6.25–200% 사이의 숫자를 입력하세요.');text.inputEl.reportValidity();return;}text.inputEl.setCustomValidity('');this.plugin.settings.editMinZoom=number;await this.plugin.persist();}));
-  new Setting(this.containerEl).setName('입력 줄 따라가기').setDesc('편집 중 줄바꿈 시 입력 줄을 화면 중앙으로 이동합니다. 가로 위치는 따라가지 않습니다.').addToggle(toggle=>toggle.setValue(this.plugin.settings.followCaret).onChange(async value=>{this.plugin.settings.followCaret=value;await this.plugin.persist();}));
-  new Setting(this.containerEl).setName('화면 이동 시간').setDesc('밀리초(ms). 값이 클수록 천천히 이동합니다.').addText(text=>text.setValue(String(this.plugin.settings.panDuration)).onChange(async value=>{const number=Number(value);if(!value.trim()||!Number.isFinite(number)||number<0)return;this.plugin.settings.panDuration=number;await this.plugin.persist();}));
+  this.resetButton(new Setting(this.containerEl).setName('생성 모드').setDesc('모든 캔버스에 적용하며 마지막 선택을 저장합니다.').addDropdown(d=>d.addOption('create','일반 생성').addOption('connect','연결 생성').setValue(this.plugin.settings.mode).onChange(async value=>{this.plugin.settings.mode=value as Settings['mode'];await this.plugin.persist();})),'mode');
+  for(const [key,label] of [['width','새 카드 기본 너비'],['height','새 카드 기본 높이'],['gap','카드 사이 간격'],['resizeStep','크기 조절 단위'],['swapTolerance','위치 교환 시 가로 정렬 허용 오차']] as const){
+   if(key==='resizeStep')this.containerEl.createEl('h3',{text:'카드 크기'});
+   this.resetButton(new Setting(this.containerEl).setName(label).setDesc('캔버스 기준 픽셀(px)').addText(text=>text.setPlaceholder('Obsidian 기본값').setValue(String(this.plugin.settings[key]??'')).onChange(async value=>{const n=Number(value);if(!value.trim()||!Number.isFinite(n)||(['gap','swapTolerance'].includes(key)?n<0:n<=0))return;this.plugin.settings[key]=n;await this.plugin.persist();})),key);
+  }
+  new Setting(this.containerEl).setName('선택한 카드 내용에 맞추기').setDesc('편집을 마친 뒤 Ctrl+Shift+R을 누르면 선택한 텍스트 카드 각각의 크기를 맞춥니다. 자동 실행하지 않으며 단축키 설정에서 키를 바꿀 수 있습니다.');
+  this.containerEl.createEl('h3',{text:'카메라'});
+  this.cameraSlider('panStep','화면 이동량','Shift+방향키 한 번의 이동 거리. 기본 60px.',1,600,1,'px');
+  this.cameraSlider('zoomStepPercent','확대·축소량','Shift+Alt+↑/↓ 한 번의 배율 변화. 기본 약 7.18%.',0.01,50,0.01,'%');
+  this.cameraSlider('editMinZoom','편집 시 최소 확대율','기본 100%. 이미 더 확대되어 있으면 유지합니다.',6.25,200,0.25,'%');
+  this.resetButton(new Setting(this.containerEl).setName('입력 줄 따라가기').setDesc('편집 중 줄바꿈 시 입력 줄을 화면 중앙으로 이동합니다. 가로 위치는 따라가지 않습니다.').addToggle(toggle=>toggle.setValue(this.plugin.settings.followCaret).onChange(async value=>{this.plugin.settings.followCaret=value;await this.plugin.persist();})),'followCaret');
+  this.cameraSlider('panDuration','화면 이동 시간','값이 클수록 천천히 이동합니다. 기본 250ms.',0,2000,10,'ms');
   this.containerEl.createEl('h3',{text:'단축키'});
   new Setting(this.containerEl).setName('Obsidian 단축키 설정').setDesc('명령으로 등록된 단축키를 확인하거나 변경합니다.').addButton(b=>b.setButtonText('단축키 설정 열기').onClick(()=>{const settings=(this.app as any).setting;settings.openTabById('hotkeys');const tab=settings.activeTab;tab?.searchComponent?.setValue('Canvas Mindmap');tab?.updateHotkeyVisibility?.();}));
   this.containerEl.createEl('h3',{text:'설정 백업 및 복원'});
