@@ -1,4 +1,11 @@
-# 0.5.23 다중 선택·연결 단계 정렬 — 미배포 (2026-10-23)
+# 0.5.23 배포 완료 (2026-10-23)
+
+사용자 최종 확인 및 배포 승인. 소스 81fd0bc를 main에 push, 공개 Release https://github.com/tlatndms2-droid/obsidian-advanced-mindmap/releases/tag/0.5.23 발행. 최종 Sandbox 설치본 3파일과 로컬 일치, 공개 assets 3개 재다운로드 후 로컬과 바이트 일치 확인. BRAT 설치·업데이트 시험은 기존 사용자 생략 요청 유지. Sandbox 열어둠. 아래 미배포 표기는 당시 작업 이력.
+main.js SHA256 090c81e40738b40accdcc3c91efae4e709b8653b4f51934d13bbd2db4af443ef
+manifest.json SHA256 9578c4a64f798f1d782ef52962d88d082e6e1466f790783ffbfa0c525956489d
+styles.css SHA256 56222ee41c50deafadea276d45eea9b077bfab920f0ef2f71ee31ea1382d0f85
+
+# 0.5.23 다중 선택·연결 단계 정렬 — 미배포 당시 기록 (2026-10-23)
 
 정렬 거리 범위 추가: 카드 정렬 설정에 1~5단계 슬라이더, 기본/초기화 3. 기존 거리 임계값에 0.5/0.75/1/1.5/2 배수 적용, 연결 단계와 별개. 설정 백업 포함, 이전 백업/설정에 없으면 3으로 호환. 단계별 경계·3단계 동일 결과·백업 회귀 및 11개 검사/타입/빌드 통과. 실제 Sandbox 슬라이더 1↔5 결과 차이, 초기화3, Undo/Redo, 전체 재시작 후 저장값5 유지 확인 후 기본3으로 반환. 증거 verification/artifacts/range-0523. 공개 배포 없음.
 
