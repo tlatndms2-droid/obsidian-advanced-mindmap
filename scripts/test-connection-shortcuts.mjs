@@ -6,4 +6,10 @@ let count=0;for(const [code,key] of [['KeyA','A'],['KeyA','ㅁ'],['KeyS','S'],['
 for(const opts of ['editing','input','readonly','selection','alt','meta','composing']){const {p,n,c,counts}=setup(),e=event('KeyA','ㅁ');if(opts==='editing')n.isEditing=true;if(opts==='input')e.target.closest=()=>({});if(opts==='readonly')c.readonly=true;if(opts==='selection')p.selected=()=>null;if(opts==='alt')e.altKey=true;if(opts==='meta')e.metaKey=true;if(opts==='composing')e.isComposing=true;p.keydown(e);assert.equal(counts().hint+counts().reverse,0);count++;}
 {const {p,counts}=setup(),e=event('KeyS','S');e.type='keydown';ctx.window.event=e;assert.equal(p.shouldRunConnectionCommand(),true);p.openReverse();p.keydown(e);assert.equal(counts().reverse,1);assert.equal(p.shouldRunConnectionCommand(),false);ctx.window.event=event('KeyS','S',{type:'keydown',repeat:true});assert.equal(p.shouldRunConnectionCommand(),false);delete ctx.window.event;assert.equal(p.shouldRunConnectionCommand(),true);count++;}
 console.log('PASS '+count+' Ctrl+Shift A/S routing and safety cases (actual handler, mocked Canvas).');
+for(const nativeFirst of [true,false]){const {p,c}=setup();c.selection=new Set(c.nodes.values());let calls=0;p.arrange=()=>calls++;const e=event('KeyL','ㅣ',{type:'keydown'});ctx.window.event=e;
+ const command=()=>{if(p.shouldRunConnectionCommand())p.arrange(c)};
+ if(nativeFirst){command();p.keydown(e);}else{p.keydown(e);command();}
+ assert.equal(calls,1,'one physical L event must arrange once across both handlers');delete ctx.window.event;
+}
+console.log('PASS Ctrl+Shift+L duplicate event suppression in either handler order');
 

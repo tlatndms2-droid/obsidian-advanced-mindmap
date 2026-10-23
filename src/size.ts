@@ -47,14 +47,16 @@ export class SizeController {
   try{c.setData(after);this.committed.set(c,JSON.stringify(c.getData()));c.requestSave();}catch(error){c.importData(before,true);c.history.data=history.data;c.history.current=history.current;c.updateHistoryUI();c.requestSave();throw error;}
  }
  private fitting=false;
+ private fitEpoch=0;
+ cancelPendingFit(){this.fitEpoch++;}
  async fitSelection(c:any){
   if(this.fitting||c.readonly)return;
   const nodes=[...c.selection].filter((n:any)=>n.getData().type==='text'&&c.nodes.get(n.id)===n) as any[];
   if(!nodes.length)return;this.fitting=true;this.finish();
-  const before:CanvasData=structuredClone(c.getData()),after=structuredClone(before);
+  const epoch=this.fitEpoch,before:CanvasData=structuredClone(c.getData()),after=structuredClone(before);
   try{
    for(const n of nodes){const size=await this.autoFit(c,n);if(size)Object.assign(after.nodes.find(v=>v.id===n.id)!,size);}
-   if(this.disposed||c.readonly||snapshotKey(before)!==snapshotKey(c.getData()))return;
+   if(this.disposed||epoch!==this.fitEpoch||c.readonly||snapshotKey(before)!==snapshotKey(c.getData()))return;
    if(snapshotKey(before)!==snapshotKey(after)){
     c.requestPushHistory.cancel?.();c.pushHistory(before);
     for(const n of nodes){const size=after.nodes.find(v=>v.id===n.id)!;n.resize({width:size.width,height:size.height});}

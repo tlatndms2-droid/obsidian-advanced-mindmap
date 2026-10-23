@@ -1,0 +1,18 @@
+import vm from 'node:vm';import assert from 'node:assert/strict';import {build} from 'esbuild';
+const stub={Plugin:class{},PluginSettingTab:class{},Modal:class{},FuzzySuggestModal:class{}};
+const out=await build({entryPoints:['src/main.ts'],bundle:true,write:false,platform:'node',format:'cjs',external:['obsidian','electron']});
+const timers=new Map();let id=0;const context={module:{exports:{}},require:()=>stub,console,document:{querySelector:()=>null},window:{setTimeout(fn){timers.set(++id,fn);return id;},clearTimeout(id){timers.delete(id);}}};
+vm.runInNewContext(out.outputFiles[0].text,context);const Plugin=context.module.exports.default;
+let drawing=false,cleanups=0;const c={wrapperEl:{classList:{contains:()=>drawing}}},other={wrapperEl:{classList:{contains:()=>false}}};let active=c;
+const p=new Plugin();Object.assign(p,{app:{workspace:{getActiveViewOfType:()=>({getViewType:()=> 'canvas',canvas:active})}},sizes:{finish(){},cancelPendingFit(){cleanups++;}},navigation:{cancel(){}},editorCamera:{stop(){}},panels:{close(){}},fileInsert:{close(){}},cardMedia:{dispose(){}},updateCardKeys(){},clearConnectHint(){}});
+assert.equal(p.current(),c);p.altTap={clean:true,c};p.altRepeat={timer:context.window.setTimeout(()=>{},300)};p.hold={timer:context.window.setTimeout(()=>{},500)};
+drawing=true;assert.equal(p.current(),null);assert.equal(p.altTap,null);assert.equal(p.altRepeat,null);assert.equal(p.hold,null);assert.equal(timers.size,0);assert.equal(cleanups,1);
+const event={key:'Alt',code:'AltLeft',preventDefault(){throw Error('Mindmap must yield without consuming input');},stopImmediatePropagation(){throw Error('Mindmap must yield');}};
+p.keydown(event);p.keyup(event);assert.equal(cleanups,1,'cleanup only once per entry');
+active=other;assert.equal(p.current(),other,'another Canvas remains available');active=c;assert.equal(p.current(),null);drawing=false;assert.equal(p.current(),c);drawing=true;assert.equal(p.current(),null);assert.equal(cleanups,3);
+console.log('PASS drawing blocks both key phases, clears queued actions, yields events and restores only the active Canvas');
+const sizeOut=await build({entryPoints:['src/size.ts'],bundle:true,write:false,platform:'node',format:'cjs',external:['obsidian']});const sizeCtx={module:{exports:{}},require:()=>stub,structuredClone,console};vm.runInNewContext(sizeOut.outputFiles[0].text,sizeCtx);
+const sizes=new sizeCtx.module.exports.SizeController({register(){}});const node={id:'a',getData:()=>({type:'text'})};const data={nodes:[{id:'a',type:'text',width:100,height:100}],edges:[]};let resolve,commits=0;
+const canvas={nodes:new Map([['a',node]]),selection:new Set([node]),getData:()=>data,pushHistory(){commits++;}};
+sizes.autoFit=()=>new Promise(r=>resolve=r);const fitting=sizes.fitSelection(canvas);sizes.cancelPendingFit();resolve({width:200,height:200});await fitting;assert.equal(commits,0);
+console.log('PASS an in-flight card fit cannot commit after drawing entry');
