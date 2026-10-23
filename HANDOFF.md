@@ -1,3 +1,13 @@
+# 0.5.22 배포 완료 (2026-10-23)
+
+사용자 확인 및 전체 배포 승인으로 공개 발행 완료. 아래 미배포 문구는 당시 검증 이력.
+Release: https://github.com/tlatndms2-droid/obsidian-advanced-mindmap/releases/tag/0.5.22
+소스 b300df3. 타입·10개 코드 검사·최종 Sandbox 설치본 일치 확인. 공개 설치파일3개 다운로드 후 로컬 빌드 바이트 일치.
+main.js SHA256 144d6f861c7770c500ee6b57fcc9771387170b9df7abba0bb863d99cfc3811e0
+manifest.json SHA256 d3b4a6a0e8d0a5a7cac4e71e99f4ccae22713cebb43ccbbb76adad6b2c86f8f3
+styles.css SHA256 56222ee41c50deafadea276d45eea9b077bfab920f0ef2f71ee31ea1382d0f85
+BRAT 설치·업데이트 시험은 기존 사용자 생략 요청 유지. Sandbox 열어둠.
+
 # 0.5.22 확정 수정사항 반영 — Sandbox 검증, 미배포 (2026-10-23)
 
 후속 메뉴 수정: 숫자는 평소 숨기고 편집 밖 Alt+M 카드 메뉴를 열었을 때만 표시. 숫자로 도구 선택 후 색상 선택지는 방향키/Enter/Esc로 조작하며 Canvas 키로 전달하지 않음. 다중 선택 native 정렬 메뉴도 지원. 편집 중 Alt+M은 카드 메뉴가 아니라 실제 입력 편집기 우클릭(링크·서식·단락·삽입·클립보드) 메뉴로 변경. 하위 메뉴 순차 Esc·커서 복귀 유지. 최종 빌드 재설치·전체 재시작 후 5개 실제 Sandbox 시나리오 통과. 증거 verification/artifacts/menu-0522/{runtime,align}.json, editor-menu.png, color-choice.png, numbers.png. 배포 없음.
