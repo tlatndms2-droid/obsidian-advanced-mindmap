@@ -1,3 +1,10 @@
+# 0.5.22 확정 수정사항 반영 — Sandbox 검증, 미배포 (2026-10-23)
+
+후속 메뉴 수정: 숫자는 평소 숨기고 편집 밖 Alt+M 카드 메뉴를 열었을 때만 표시. 숫자로 도구 선택 후 색상 선택지는 방향키/Enter/Esc로 조작하며 Canvas 키로 전달하지 않음. 다중 선택 native 정렬 메뉴도 지원. 편집 중 Alt+M은 카드 메뉴가 아니라 실제 입력 편집기 우클릭(링크·서식·단락·삽입·클립보드) 메뉴로 변경. 하위 메뉴 순차 Esc·커서 복귀 유지. 최종 빌드 재설치·전체 재시작 후 5개 실제 Sandbox 시나리오 통과. 증거 verification/artifacts/menu-0522/{runtime,align}.json, editor-menu.png, color-choice.png, numbers.png. 배포 없음.
+
+사용자 배포 금지. Alt+R 편집 중 내용 맞춤, Tab 양방향 출발점 후보와 부착면/메뉴 입력 수정, Ctrl hold 500ms(Tab 200ms 유지), 편집 중 Alt+M 메뉴·커서 복원, 다중 선택 기준 카드 glow, 상단 숫자 툴바 1–20 키/표시 반영. 그룹 인식 추가 취소 유지.
+타입·10개 코드 테스트·추가 Tab 회귀 및 최종 Sandbox 전체 재시작 후 핵심 동작 통과. 상세 verification/REVISION-0.5.22.md. Sandbox Obsidian 1.14.5 / plugin 0.5.22 / port9267 열어둠. 공개 릴리즈는 0.5.21 유지, push/Release/BRAT 없음.
+
 # 0.5.21 통합 배포 완료 — 2026-10-21
 
 사용자가 0.5.19–0.5.21 전체 변경 배포 승인. 아래 미배포 문구는 당시 이력이며 현재 공개 버전은 0.5.21.

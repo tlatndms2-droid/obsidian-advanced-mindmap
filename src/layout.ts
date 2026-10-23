@@ -4,7 +4,8 @@ export interface CanvasData { nodes: Card[]; edges: Edge[]; [key: string]: unkno
 export type Direction = 'left' | 'right' | 'up' | 'down';
 export interface Creation { anchor: string; id: string; direction: Direction; tab: boolean; width: number; height: number; gap: number; connected: boolean; source?: string }
 export function sources(data: CanvasData, id: string): Card[] {
-  const ids = new Set(data.edges.filter(e => e.toNode === id).map(e => e.fromNode));
+  const ids = new Set(data.edges.filter(e => e.toNode === id || e.fromNode === id).map(e => e.toNode === id ? e.fromNode : e.toNode));
+  ids.delete(id);
   return data.nodes.filter(n => ids.has(n.id) && n.type !== 'group').sort((a,b) => a.x-b.x || a.y-b.y || a.id.localeCompare(b.id));
 }
 /** Compute the entire change before touching the live Canvas. */
@@ -23,6 +24,15 @@ export function createLayout(input: CanvasData, op: Creation): CanvasData {
   if (dir==='down') node.y=anchor.y+anchor.height+gap;
   data.nodes.push(node);
   const source = op.tab ? op.source : anchor.id;
-  if(op.connected&&source&&data.nodes.some(n=>n.id===source))data.edges.push({id:`e${op.id}`,fromNode:source,toNode:node.id,fromSide:op.tab?'right':dir==='up'?'top':dir==='down'?'bottom':dir,toSide:op.tab?'left':dir==='up'?'bottom':dir==='down'?'top':dir==='right'?'left':'right'});
+  const parent=data.nodes.find(n=>n.id===source);
+  if(op.connected&&source&&parent){
+    let facing:Direction=dir;
+    if(op.tab){
+      const dy=node.y+node.height/2-parent.y-parent.height/2;
+      facing=parent.x+parent.width<=node.x ? 'right' : node.x+node.width<=parent.x ? 'left' : (dy>=0?'down':'up');
+    }
+    const side={up:'top',down:'bottom',left:'left',right:'right'},opposite={up:'bottom',down:'top',left:'right',right:'left'};
+    data.edges.push({id:`e${op.id}`,fromNode:source,toNode:node.id,fromSide:side[facing],toSide:opposite[facing]});
+  }
   return data;
 }

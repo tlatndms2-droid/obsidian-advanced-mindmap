@@ -48,18 +48,22 @@ export class SizeController {
  }
  private fitting=false;
  async fitSelection(c:any){
-  if(this.fitting||c.readonly||[...c.nodes.values()].some((n:any)=>n.isEditing))return;
+  if(this.fitting||c.readonly)return;
   const nodes=[...c.selection].filter((n:any)=>n.getData().type==='text'&&c.nodes.get(n.id)===n) as any[];
   if(!nodes.length)return;this.fitting=true;this.finish();
-  const before:CanvasData=structuredClone(c.getData()),after=structuredClone(before),ids=[...c.selection].map((n:any)=>n.id);
+  const before:CanvasData=structuredClone(c.getData()),after=structuredClone(before);
   try{
    for(const n of nodes){const size=await this.autoFit(c,n);if(size)Object.assign(after.nodes.find(v=>v.id===n.id)!,size);}
-   if(this.disposed||c.readonly||[...c.nodes.values()].some((n:any)=>n.isEditing)||snapshotKey(before)!==snapshotKey(c.getData()))return;
-   if(snapshotKey(before)!==snapshotKey(after)){this.apply(c,before,after);c.selectAll(ids.map((id:string)=>c.nodes.get(id)).filter(Boolean));}
+   if(this.disposed||c.readonly||snapshotKey(before)!==snapshotKey(c.getData()))return;
+   if(snapshotKey(before)!==snapshotKey(after)){
+    c.requestPushHistory.cancel?.();c.pushHistory(before);
+    for(const n of nodes){const size=after.nodes.find(v=>v.id===n.id)!;n.resize({width:size.width,height:size.height});}
+    c.requestPushHistory.cancel?.();c.pushHistory(c.getData());c.requestSave(false);
+   }
   }finally{this.fitting=false;}
  }
  private async autoFit(c:any,n:any){
-  if(this.disposed||n.isEditing||c.readonly||c.nodes.get(n.id)!==n)return;
+  if(this.disposed||c.readonly||c.nodes.get(n.id)!==n)return;
   const initialText=n.text,width=n.width;
   if(!String(initialText||'').trim()){const defaults=c.config.defaultTextNodeDimensions,w=this.host.settings.width??defaults.width,h=this.host.settings.height??defaults.height;if(n.width!==w||n.height!==h){return {width:w,height:h};}return;}
   const owner=n.nodeEl.ownerDocument;
@@ -79,7 +83,7 @@ export class SizeController {
    // Canvas preview wraps each rendered block; retain that structure so paragraph margins match.
    for(const child of [...sizer.children]){const block=owner.createElement('div');block.className=`el-${child.tagName.toLowerCase()}`;child.replaceWith(block);block.appendChild(child);}
    await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));
-   if(this.disposed||n.isEditing||c.nodes.get(n.id)!==n||n.text!==initialText||n.width!==width)return;
+   if(this.disposed||c.nodes.get(n.id)!==n||n.text!==initialText||n.width!==width)return;
    // Native Canvas uses size containment on the container; its own rect is not content height.
    const cs=getComputedStyle(container),cc=getComputedStyle(content);
    const px=(s:string)=>parseFloat(s)||0;

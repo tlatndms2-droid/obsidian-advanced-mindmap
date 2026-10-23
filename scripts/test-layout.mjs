@@ -31,3 +31,11 @@ test('unknown Canvas attributes preserved and invalid transaction rejected',()=>
  const data={nodes:[{...card('a',0,0),color:'3',custom:'keep'}],edges:[],metadata:{keep:true}};const r=createLayout(data,base);assert.deepEqual(r.metadata,data.metadata);assert.equal(r.nodes[0].custom,'keep');assert.throws(()=>createLayout(data,{...base,width:0}));assert.equal(data.nodes.length,1);
 });
 console.log(JSON.stringify({passed:tests.length,tests},null,2));
+test('Tab includes either arrow direction, excludes groups and duplicate peers',()=>{
+ const input={nodes:[card('a',0,0),card('left',-500,0),card('right',500,0),{...card('g',0,-500),type:'group'}],edges:[edge('left','a'),edge('a','right'),edge('right','a'),edge('a','g')]};
+ assert.deepEqual(sources(input,'a').map(n=>n.id),['left','right']);
+ for(const [source,fromSide,toSide] of [['left','right','left'],['right','left','right']]){
+  const result=createLayout(input,{...base,tab:true,source});assert.deepEqual(result.edges.slice(0,input.edges.length),input.edges);assert.equal(result.edges.at(-1).fromSide,fromSide);assert.equal(result.edges.at(-1).toSide,toSide);assert.deepEqual([result.nodes.at(-1).x,result.nodes.at(-1).y],[0,200]);
+ }
+});
+console.log('PASS Tab bidirectional candidates and facing sides');
