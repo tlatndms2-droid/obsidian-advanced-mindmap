@@ -6,7 +6,7 @@ import { FileInsertMenu } from './file-insert';
 import { insertFile,canInsertFile } from './file-insert-data';
 import { SettingsTransfer } from './settings-transfer';
 import { settingsOnly } from './settings-backup';
-import { arrangeConnected } from './arrange';
+import { arrangeSelection } from './arrange';
 import { CanvasPanels } from './panels';
 import { Menu, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import { createLayout, sources, type CanvasData, type Direction } from './layout';
@@ -15,8 +15,8 @@ import { SelectionHistory } from './selection-history';
 import { SizeController } from './size';
 import { NavigationController, nearestCard } from './navigation';
 type Canvas = any;
-interface Settings { mode: 'create'|'connect'; width: number|null; height:number|null; gap:number; origins:Record<string,string>;resizeStep:number;swapTolerance:number;panDuration:number;panStep:number;zoomStepPercent:number;followCaret:boolean;editMinZoom:number;customColors:string[];managerSize:{width:number;height:number}|null }
-const settingDefaults={mode:'create' as const,width:null as number|null,height:null as number|null,gap:100,resizeStep:20,swapTolerance:40,panDuration:250,panStep:60,zoomStepPercent:(2**0.1-1)*100,followCaret:true,editMinZoom:100};
+interface Settings { arrangeRange:number; arrangeDepth:number; mode: 'create'|'connect'; width: number|null; height:number|null; gap:number; origins:Record<string,string>;resizeStep:number;swapTolerance:number;panDuration:number;panStep:number;zoomStepPercent:number;followCaret:boolean;editMinZoom:number;customColors:string[];managerSize:{width:number;height:number}|null }
+const settingDefaults={arrangeRange:3,arrangeDepth:1,mode:'create' as const,width:null as number|null,height:null as number|null,gap:100,resizeStep:20,swapTolerance:40,panDuration:250,panStep:60,zoomStepPercent:(2**0.1-1)*100,followCaret:true,editMinZoom:100};
 interface Hold { key:string; timer:number; canvas:Canvas; anchor:string; consumed:boolean }
 interface MenuState { el:HTMLElement; values:string[]; index:number; kind:'mode'|'source'; canvas:Canvas; anchor:string }
 export default class CanvasMindmap extends Plugin {
@@ -68,7 +68,7 @@ export default class CanvasMindmap extends Plugin {
    if(!checking&&this.shouldRunConnectionCommand()){this.reset();this.sizes.finish();this.connectHeld=c;this.showConnectHint();}return true;
   }});
   this.addCommand({id:'reverse-connection',name:'선택 카드의 연결 방향 전환',hotkeys:[{modifiers:['Ctrl','Shift'],key:'s'}],checkCallback:checking=>{const c=this.current();if(!c||c.readonly||!this.selected(c)||[...c.nodes.values()].some((n:any)=>n.isEditing)||document.activeElement?.closest('input,textarea,[contenteditable="true"],.modal-container'))return false;if(!checking&&this.shouldRunConnectionCommand()){this.openReverse(c);}return true;}});
-  this.addCommand({id:'arrange-connected',name:'연결된 카드 정렬 (시험)',hotkeys:[{modifiers:['Ctrl','Shift'],key:'l'}],checkCallback:checking=>{const c=this.current();if(!c||c.readonly||!this.selected(c)||[...c.nodes.values()].some((n:any)=>n.isEditing)||document.activeElement?.closest('input,textarea,[contenteditable="true"],.modal-container'))return false;if(!checking)this.arrange(c);return true;}});
+  this.addCommand({id:'arrange-connected',name:'연결된 카드 정렬 (시험)',hotkeys:[{modifiers:['Ctrl','Shift'],key:'l'}],checkCallback:checking=>{const c=this.current();if(!c||c.readonly||![...c.selection].some((n:any)=>c.nodes.has(n.id)&&n.getData().type!=='group')||[...c.nodes.values()].some((n:any)=>n.isEditing)||document.activeElement?.closest('input,textarea,[contenteditable="true"],.modal-container'))return false;if(!checking)this.arrange(c);return true;}});
   this.syncColorCommands();
   this.editorCamera=new EditorCamera(this);
   this.selections=new SelectionHistory(cb=>this.register(cb));
@@ -141,7 +141,7 @@ export default class CanvasMindmap extends Plugin {
   this.sizes.finish();this.selections.observe(c);this.selections.capture(c);c.requestPushHistory.cancel?.();c.pushHistory(before);const history={data:[...c.history.data],current:c.history.current};
   try{c.setData(after);c.selectOnly(c.nodes.get(id));this.selections.capture(c);c.requestSave(false);}catch(error){c.importData(before,true);c.data=before;c.history.data=history.data;c.history.current=history.current;c.updateHistoryUI();c.requestSave(false);new Notice('파일을 넣지 못했습니다. 기존 카드를 유지합니다.');console.error(error);}
  }
- private arrange(c:Canvas){this.reset();this.clearConnectHint();this.sizes.finish();const n=this.selected(c);if(!n)return;const before:CanvasData=c.getData(),after=arrangeConnected(before,n.id,this.settings.gap);if(JSON.stringify(before)===JSON.stringify(after))return;this.selections.observe(c);this.selections.capture(c);c.requestPushHistory.cancel?.();c.pushHistory(before);const history={data:[...c.history.data],current:c.history.current};try{for(const card of after.nodes){const node=c.nodes.get(card.id);if(node&&(node.x!==card.x||node.y!==card.y))node.moveTo({x:card.x,y:card.y});}c.requestPushHistory.cancel?.();c.data=after;c.pushHistory(c.getData());this.selections.capture(c);c.requestSave(false);}catch(error){c.importData(before,true);c.data=before;c.history.data=history.data;c.history.current=history.current;c.updateHistoryUI();c.requestSave(false);new Notice('정렬하지 못했습니다. 원래 배치를 복원했습니다.');console.error(error);}}
+ private arrange(c:Canvas){this.reset();this.clearConnectHint();this.sizes.finish();const ids=[...c.selection].filter((n:any)=>c.nodes.has(n.id)&&n.getData().type!=='group').map((n:any)=>n.id);if(!ids.length)return;const before:CanvasData=c.getData(),after=arrangeSelection(before,ids,this.settings.gap,this.settings.arrangeDepth,this.settings.arrangeRange);if(JSON.stringify(before)===JSON.stringify(after))return;this.selections.observe(c);this.selections.capture(c);c.requestPushHistory.cancel?.();c.pushHistory(before);const history={data:[...c.history.data],current:c.history.current};try{for(const card of after.nodes){const node=c.nodes.get(card.id);if(node&&(node.x!==card.x||node.y!==card.y))node.moveTo({x:card.x,y:card.y});}c.requestPushHistory.cancel?.();c.data=after;c.pushHistory(c.getData());this.selections.capture(c);c.requestSave(false);}catch(error){c.importData(before,true);c.data=before;c.history.data=history.data;c.history.current=history.current;c.updateHistoryUI();c.requestSave(false);new Notice('정렬하지 못했습니다. 원래 배치를 복원했습니다.');console.error(error);}}
  private disconnect(c:Canvas,ids:Set<string>){
   this.reset();this.sizes.finish();this.selections.observe(c);this.selections.capture(c);
   const before:CanvasData=c.getData(),edges=before.edges.filter(e=>!ids.has(e.fromNode)&&!ids.has(e.toNode));if(edges.length===before.edges.length)return;
@@ -285,7 +285,7 @@ export default class CanvasMindmap extends Plugin {
    this.stop(e);if(e.repeat)return;this.reset();this.clearConnectHint();this.sizes.finish();this.selections.observe(c);this.selections.capture(c);
    c.requestPushHistory.cancel?.();c.pushHistory(c.getData());for(const card of cards)c.removeNode(card);c.deselectAll();c.pushHistory(c.getData());c.requestSave(false);return;
   }
-  if(!editing&&n&&e.ctrlKey&&e.shiftKey&&!e.altKey&&!e.metaKey&&e.code==='KeyL'){this.stop(e);if(!e.repeat)this.arrange(c);return;}
+  if(e.code==='KeyL'&&!editing&&e.ctrlKey&&e.shiftKey&&!e.altKey&&!e.metaKey&&c.selection.size){this.stop(e);if(!e.repeat)this.arrange(c);return;}
   this.sizes.observe(c);this.selections.observe(c);this.editorCamera.observe(c);
   if(this.linkMenuKey(e,c)||this.connectionKey(e,c))return;
   if(!editing&&n&&e.ctrlKey&&e.shiftKey&&!e.altKey&&!e.metaKey&&(e.key==='Control'||e.key==='Shift')){if(!e.repeat){this.reset();this.linkTimer=window.setTimeout(()=>{this.linkTimer=null;if(this.current()===c&&this.selected(c)?.id===n.id&&!n.isEditing)this.showLinkMenu(c,n.id,[]);},500);}return;}
@@ -385,7 +385,7 @@ class CreationSettings extends PluginSettingTab {
    for(const {el,top,left} of positions){el.scrollTop=top;el.scrollLeft=left;}
   }));
  }
- private cameraSlider(key:'panStep'|'zoomStepPercent'|'editMinZoom'|'panDuration',label:string,desc:string,min:number,max:number,step:number,unit:string){
+ private cameraSlider(key:'panStep'|'zoomStepPercent'|'editMinZoom'|'panDuration'|'arrangeDepth'|'arrangeRange',label:string,desc:string,min:number,max:number,step:number,unit:string){
   const row=new Setting(this.containerEl).setName(label).setDesc(desc),current=this.plugin.settings[key];
   row.settingEl.addClass('cm-camera-setting');
   const value=row.controlEl.createSpan({cls:'cm-setting-value',text:`${Number(current.toFixed(2))}${unit}`});
@@ -399,7 +399,10 @@ class CreationSettings extends PluginSettingTab {
    if(key==='resizeStep')this.containerEl.createEl('h3',{text:'카드 크기'});
    this.resetButton(new Setting(this.containerEl).setName(label).setDesc('캔버스 기준 픽셀(px)').addText(text=>text.setPlaceholder('Obsidian 기본값').setValue(String(this.plugin.settings[key]??'')).onChange(async value=>{const n=Number(value);if(!value.trim()||!Number.isFinite(n)||(['gap','swapTolerance'].includes(key)?n<0:n<=0))return;this.plugin.settings[key]=n;await this.plugin.persist();})),key);
   }
-  new Setting(this.containerEl).setName('선택한 카드 내용에 맞추기').setDesc('편집을 마친 뒤 Ctrl+Shift+R을 누르면 선택한 텍스트 카드 각각의 크기를 맞춥니다. 자동 실행하지 않으며 단축키 설정에서 키를 바꿀 수 있습니다.');
+  new Setting(this.containerEl).setName('선택한 카드 내용에 맞추기').setDesc('선택 중 또는 편집 중 Alt+R을 누르면 선택한 텍스트 카드 각각의 크기를 맞춥니다. 자동 실행하지 않으며 단축키 설정에서 키를 바꿀 수 있습니다.');
+  this.containerEl.createEl('h3',{text:'카드 정렬'});
+  this.cameraSlider('arrangeDepth','정렬 연결 단계','Ctrl+Shift+L: 선택한 모든 카드에서 연결을 따라 포함할 범위입니다. 1단계는 바로 연결된 카드, 2단계는 그다음 카드까지 포함합니다. 기본 1단계.',1,10,1,'단계');
+  this.cameraSlider('arrangeRange','정렬 거리 범위','낮을수록 가까운 카드끼리, 높을수록 멀리 떨어진 카드까지 같은 묶음으로 정렬합니다. 연결 단계 안의 카드에 적용하며, 기본 3단계는 기존 거리 기준입니다.',1,5,1,'단계');
   this.containerEl.createEl('h3',{text:'카메라'});
   this.cameraSlider('panStep','화면 이동량','Shift+방향키 한 번의 이동 거리. 기본 60px.',1,600,1,'px');
   this.cameraSlider('zoomStepPercent','확대·축소량','Shift+Alt+↑/↓ 한 번의 배율 변화. 기본 약 7.18%.',0.01,50,0.01,'%');

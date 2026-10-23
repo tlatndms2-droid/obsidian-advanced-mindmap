@@ -12,3 +12,9 @@ const legacy=JSON.parse(makeBackup(source));legacy.settings.autoResize=true;asse
 const old=JSON.parse(makeBackup(source));delete old.settings.panStep;delete old.settings.zoomStepPercent;assert.deepEqual(parseBackup(JSON.stringify(old)),settingsOnly(source));
 for(const bad of [0,-1,'20',null]){const f=JSON.parse(makeBackup(source));f.settings.panStep=bad;assert.throws(()=>parseBackup(JSON.stringify(f)));}
 const custom={...source,panStep:120,zoomStepPercent:15};assert.deepEqual(parseBackup(makeBackup(custom)),settingsOnly(custom));
+const legacyDepth=JSON.parse(makeBackup(source));delete legacyDepth.settings.arrangeDepth;assert.equal(parseBackup(JSON.stringify(legacyDepth)).arrangeDepth,1);
+assert.equal(parseBackup(makeBackup({...source,arrangeDepth:2})).arrangeDepth,2);
+for(const depth of [0,11,1.5,'2',null]){const file=JSON.parse(makeBackup(source));file.settings.arrangeDepth=depth;assert.throws(()=>parseBackup(JSON.stringify(file)));}
+const legacyRange=JSON.parse(makeBackup(source));delete legacyRange.settings.arrangeRange;assert.equal(parseBackup(JSON.stringify(legacyRange)).arrangeRange,3);
+for(const range of [1,2,3,4,5])assert.equal(parseBackup(makeBackup({...source,arrangeRange:range})).arrangeRange,range);
+for(const range of [0,6,2.5,'3',null]){const file=JSON.parse(makeBackup(source));file.settings.arrangeRange=range;assert.throws(()=>parseBackup(JSON.stringify(file)));}
